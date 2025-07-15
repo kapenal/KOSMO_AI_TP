@@ -15,7 +15,7 @@ document.getElementById('search_btn').addEventListener('click', async function()
         console.log("encodeURI : ", data.search_url)
         if (data.search_url) {
             // search_url을 query parameter로 붙여서 search.html로 이동
-            window.location.href = `search.html?search_url=${encodeURIComponent(data.search_url)}`;
+            window.location.href = `search2.html?search_url=${encodeURIComponent(data.search_url)}`;
         }
     } catch (error) {
         console.error('서버 오류:', error);
