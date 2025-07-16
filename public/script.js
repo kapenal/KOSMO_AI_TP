@@ -26,14 +26,14 @@ document.getElementById('search_btn').addEventListener('click', async function()
 
 
 // search_list.html에서 상세페이지(임시) 버튼 클릭 시 일어나는 이벤트
-document.getElementById('detail_btn').addEventListener('click', async function() {
-    // const searchText = document.getElementById("search_text").value;
+document.getElementById('search_btn').addEventListener('click', async function() {
+    const searchText = document.getElementById("search_text").value;
 
     try {
         // detail_page.html로 이동
-        window.location.href = "detail_page.html";
+        // window.location.href = "detail_page.html";
 
-        // // 서버로 POST 요청 보내기
+        // 서버로 POST 요청 보내기
         // const response = await fetch('/do-something', {
         //     method: 'POST',
         //     headers: {'Content-Type': 'application/json'},

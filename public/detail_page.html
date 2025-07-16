@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상세 페이지</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>상세 페이지</title>
+    </head>
+    <body>
+        <input type="text" id="search_text" placeholder="검색어를 입력하세요">
+    </body>
+    <script>
+        window.onload = function() {
+            const recommendData = JSON.parse(localStorage.getItem('recommendData'));
+
+            if (recommendData && recommendData.recommendations) {
+                console.log("추천 데이터:", recommendData);
+                // 추천 데이터의 input_title을 input에 넣기
+                document.getElementById('search_text').value = recommendData.input_title || '';
+            } else {
+                console.error("추천 데이터가 없습니다.");
+            }
+        };
+    </script>
 </html>
