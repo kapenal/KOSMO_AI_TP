@@ -46,6 +46,45 @@ app.post('/do-something', (req, res) => {
     });
 });
 
+
+// 영화 추천 POST 요청 처리
+app.post('/do-recommend', (req, res) => {
+    
+    const searchText = req.body.text;  // 클라이언트에서 보낸 임시'text' 값
+    console.log(searchText + 'detail page에서 버튼이 클릭되었어요!');
+
+    // Python 스크립트 실행
+    const pythonProcess = spawn(
+        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        [path.join(__dirname, "public", "recommend.py"), searchText]
+    );
+    console.log("Python 프로세스 시작됨, search_text:", searchText);
+    // Python 프로세스 실행 후 결과 처리
+    pythonProcess.stdout.on('data', (data) => {
+        try {
+            const output = JSON.parse(data.toString()); // 반환된 main.py의 search_url이 data 매개변수로 받아옴
+            console.log("Python에서 받은 추천 데이터:", output);
+        // 추천 결과를 그대로 프론트로 넘기기
+        res.json({
+            input_title: output.input_title,
+            recommendations: output.recommendations
+        });
+        } catch (error) {
+            console.error('JSON 파싱 오류:', error);
+            res.status(500).json({ error: 'Python 결과 처리 중 오류 발생' });
+        }
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Python Error: ${data.toString()}`);
+        res.status(500).json({ error: 'Python 스크립트 실행 중 오류 발생' });
+    });
+
+    pythonProcess.on('close', (code) => {
+        console.log(`Python process exited with code ${code}`);
+    });
+});
+
 // 서버 시작
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
