@@ -12,8 +12,8 @@ if __name__ == "__main__":
     
     search_text = sys.argv[1]  # Node.js에서 전달된 텍스트 인자
 
-    # 검색 URL 생성 (구글 검색 예시)
+    # 검색 단어 생성 (검색 예시)
     search_url = search_text
 
-    # URL을 JSON 형태로 출력
+    # 단어를 JSON 형태로 반환
     print(json.dumps({"search_url": search_url}, ensure_ascii=False))
