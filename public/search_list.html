@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 결과</title>
+    <script>
+        // 페이지 로드 시 search_text을 받아서 input에 넣어주기
+        window.onload = function() {
+            // URL 파라미터에서 search_text 값 가져오기
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchText = urlParams.get('search_url');
+            
+            if (searchText) {
+                // <input>에 search_text 값 설정
+                document.getElementById('search_text').value = searchText;
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Search Result Page</h1>
+    <form>
+        <p>검색 <input type="text" id="search_text"></p>
+        <button id="search_btn">검색</button>
+    </form>
+    <button id="detail_btn">상세 페이지</button>
+    <script src="script.js"></script>
+
+    <!-- <script>
+        // 페이지 로드 시 search_url을 받아서 리다이렉트
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchUrl = urlParams.get('search_url');
+            
+            if (searchUrl) {
+                // search_url이 존재하면 해당 URL로 리다이렉트
+                window.location.href = searchUrl;
+            } else {
+                console.error("search_url 파라미터가 없습니다.");
+            }
+        };
+    </script> -->
+</body>
+</html>

@@ -25,10 +25,10 @@ app.post('/do-something', (req, res) => {
     // Python 프로세스 실행 후 결과 처리
     pythonProcess.stdout.on('data', (data) => {
         try {
-            const output = JSON.parse(data.toString());
-            const searchURL = output.search_url;  // Python에서 반환된 검색 URL
+            const output = JSON.parse(data.toString()); // 반환된 main.py의 search_url이 data 매개변수로 받아옴
+            const searchURL = output.search_url;  // search_url의 값만 따로 searchURL에 넣어줌
 
-            // search_url을 클라이언트에 반환
+            // searchURL을 클라이언트(script.js) 반환
             res.json({ search_url: searchURL });
         } catch (error) {
             console.error('JSON 파싱 오류:', error);
