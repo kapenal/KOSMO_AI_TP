@@ -21,13 +21,13 @@ document.getElementById('detail_btn').addEventListener('click', async function()
             localStorage.setItem('recommendData', JSON.stringify(data));
             
             // 페이지 이동
-            window.location.href = 'detail_page.html';
+            window.location.href = '/html/detail_page.html';
         } else {
             console.error('추천 데이터 없음:', data);
         }
         // 에러 처리
     } catch (error) {
         console.error('서버 오류:', error);
-    }
+    }``
     
 });

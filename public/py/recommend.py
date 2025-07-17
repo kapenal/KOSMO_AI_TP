@@ -4,17 +4,25 @@ import numpy as np
 import joblib
 import numpy as np
 from soynlp.tokenizer import LTokenizer
-import io
+import io, os
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# 파일 로드 경로 설정
-PATH = "C:/kosmo/model/"
+# # 파일 로드 경로 설정
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# PATH = os.path.join(BASE_DIR, "..", "model")
+# 현재 recommend.py 파일 경로
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# public/py → public → TeamProject → model 로 올라감
+PATH = os.path.normpath(os.path.join(BASE_DIR, '..', '..', 'model'))
+
+
 
 # 모델 및 토큰 로드
-model = joblib.load(PATH + "word2vec_movie.model")        # 학습된 Word2Vec 모델
-movie_vectors = np.array(joblib.load(PATH + "movie_vectors.pkl"))  # 영화별 벡터 (줄거리+장르 기반)
-movies = joblib.load(PATH + "movies.pkl")                 # 영화 정보 리스트 (제목, 줄거리, 장르 등)
-title_tokens = joblib.load(PATH + "title_tokens.pkl")     # 영화 제목을 토큰화한 리스트 (검색용)
+model = joblib.load(os.path.join(PATH, "word2vec_movie.model"))        # 학습된 Word2Vec 모델
+# movie_vectors = np.array(os.path.join(joblib.load(PATH, "movie_vectors.pkl")))  # 영화별 벡터 (줄거리+장르 기반)
+movie_vectors = joblib.load(os.path.join(PATH, "movie_vectors.pkl"))
+movies = joblib.load(os.path.join(PATH, "movies.pkl"))                 # 영화 정보 리스트 (제목, 줄거리, 장르 등)
+title_tokens = joblib.load(os.path.join(PATH, "title_tokens.pkl"))     # 영화 제목을 토큰화한 리스트 (검색용)
 
 # 제목 검색용 토큰나이저
 tokenizer = LTokenizer()

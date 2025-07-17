@@ -4,12 +4,21 @@ const app = express();
 const port = 3000;
 const { spawn } = require('child_process');
 const path = require("path");
+const { urlencoded } = require('body-parser');
+
+// 추가한 바디 파싱
+app.use(express.urlencoded({ extended: true }));
 
 // JSON 파싱 미들웨어 추가
 app.use(express.json());
 
 // 정적 파일 제공 (HTML, JS 파일을 제공)
 app.use(express.static('public')); // index.html과 script.js를 제공
+
+// 기본 라우트 처리 - index.html로 연결
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
+});
 
 // POST 요청 처리
 app.post('/search_movie', (req, res) => {
@@ -18,8 +27,8 @@ app.post('/search_movie', (req, res) => {
 
     // Python 스크립트 실행
     const pythonProcess = spawn(
-        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        [path.join(__dirname, "public", "search_movies.py"), searchText]
+        'python',
+        [path.join(__dirname, "public",  "py", "search_movies.py"), searchText]
     );
     
     // Python 프로세스 실행 후 결과 처리
@@ -52,8 +61,8 @@ app.post('/do-recommend', (req, res) => {
     console.log(searchText + ' detail page에서 버튼이 클릭되었어요!');
 
     const pythonProcess = spawn(
-        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        [path.join(__dirname, "public", "recommend.py"), searchText]
+        "python",
+        [path.join(__dirname, "public",  "py", "recommend.py"), searchText]
     );
 
     let dataBuffer = "";
