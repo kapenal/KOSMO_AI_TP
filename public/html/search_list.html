@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 결과</title>
+    <script>
+        // 페이지 로드 시 search_text을 받아서 input에 넣어주기
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedMovieData = urlParams.get('search_movie');
+            const keyword = urlParams.get('keyword');
+
+            console.log("📦 인코딩된 데이터:", encodedMovieData);
+
+            if (encodedMovieData) {
+                try {
+                    const movieData = JSON.parse(decodeURIComponent(encodedMovieData));
+
+                    // if (Array.isArray(movieData)) {
+                    //     // 영화 리스트일 경우 출력
+                    //     movieData.forEach(movie => {
+                    //         console.log("🎬 제목:", movie.제목)
+                    //         console.log("⭐️ 별점:", movie.별점)
+                    //         console.log("📝 개요:", movie.개요)
+                    //         console.log("🖼 포스터:", movie.포스터);
+                    //         // HTML에 출력
+                    //         document.getElementById('search_text').value = movie.제목;
+                    //     });
+                    // } else if (movieData.message) {
+                    //     // 에러 메시지 출력
+                    //     console.log("❌ 메시지:", movieData.message);
+                    //     document.getElementById("result").innerText = movieData.message;
+                    // } else {
+                    //     console.log("⚠️ 예상하지 못한 데이터 구조:", movieData);
+                    // }
+
+                    // 🔧 [수정 1] message가 있는 경우 먼저 처리하고 하단 로직 실행 안 하게 return
+                    if (movieData.message) {
+                        const movieInfoDiv = document.getElementById('movie_info');
+                        if (movieInfoDiv) {
+                            movieInfoDiv.innerHTML = `<p>${movieData.message}</p>`;
+                        }
+                        document.getElementById('search_text').value = keyword;
+                        return;  // 👈 반드시 return해서 아래 코드 실행되지 않도록
+                    }
+
+                    // 🔧 [추가] movieData가 빈 배열이면 "검색 결과 없음" 메시지 출력
+                    if (Array.isArray(movieData) && movieData.length === 0) {
+                        const movieInfoDiv = document.getElementById('movie_info');
+                        if (movieInfoDiv) {
+                            movieInfoDiv.innerHTML = "<p>❌ 검색 결과가 없습니다.</p>";
+                        }
+                        document.getElementById('search_text').value = keyword;
+                        return;
+                    }
+
+                    // 배열 첫 번째 영화 데이터 사용
+                    const movie = movieData[0];
+
+                    // ✅ 어떤 필드에서 keyword가 포함되었는지 보고 input 창에 표시
+                    if (keyword && movie.제목.includes(keyword)) {
+                        document.getElementById('search_text').value = movie.제목;
+                    } else if (keyword && movie.개요.includes(keyword)) {
+                        document.getElementById('search_text').value = movie.개요;
+                    } else {
+                        document.getElementById('search_text').value = keyword;
+                    }
+
+                    // 결과 영역에 영화 정보 표시
+                    document.getElementById('title').innerText = "🎬 " + movie.제목;
+                    document.getElementById('rating').innerText = "⭐️ 별점: " + movie.별점;
+                    document.getElementById('overview').innerText = "📝 개요: " + movie.개요;
+                    document.getElementById('poster').src = movie.포스터;
+
+                    // ✅ 브라우저 탭 제목 설정
+                    document.title = movie.제목 + "- 무비 센서스 검색결과";
+
+                } catch (e) {
+                    console.error("❌ JSON 파싱 오류:", e);
+                }
+            } else {
+                console.log("⚠️ search_movie 파라미터가 없습니다.");
+                // 🔧 search_movie 파라미터 자체가 없을 때도 메시지 출력
+                const movieInfoDiv = document.getElementById('movie_info');
+                if (movieInfoDiv) {
+                    movieInfoDiv.innerHTML = "<p>❌ 검색 결과가 없습니다.</p>";
+                }
+                document.getElementById('search_text').value = keyword;
+            }
+        };
+
+    </script>
+</head>
+<body>
+    <h1>무비센서스</h1>
+    <form>
+        <p>검색 <input type="text" id="search_text"></p>
+        <button id="search_btn">검색</button>
+    </form>
+    <button id="detail_btn">상세 페이지</button>
+    <script src="../js/script.js"></script>
+    <script src="../js/detail_page.js"></script>
+
+    <!-- 영화 정보 표시 영역 -->
+    <div id="movie_info">
+        <h2 id="title">🎬 제목</h2>
+        <p id="rating">⭐️ 별점</p>
+        <p id="overview">📝 개요</p>
+        <img id="poster" src="" alt="포스터 이미지" style="max-width:200px;">
+    </div>
+</body>
+</html>
