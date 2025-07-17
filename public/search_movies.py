@@ -10,7 +10,7 @@ import time
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # 현재상영영화 페이지를 크롤링하는 함수 정의
-def crawl_movies_fixed_scroll(keyword, max_pages=8, scroll_position=800):
+def crawl_movies_fixed_scroll(keyword, max_pages=8, scroll_position=800, max_results=5):
     options = Options()  # Chrome 옵션 설정 객체 생성
     options.add_argument('--headless')  # 브라우저 창을 띄우지 않도록 설정 (백그라운드 실행)
     options.add_argument('--disable-gpu')  # GPU 사용 안함 (headless 모드에서 필수는 아님)
@@ -55,12 +55,20 @@ def crawl_movies_fixed_scroll(keyword, max_pages=8, scroll_position=800):
 
             # 제목 또는 개요 중 하나라도 키워드 포함 시 저장
             if keyword in title_lower or any(keyword in part for part in overview_parts):
+              
                 results.append({
                     "제목": title,
                     "별점": rating,
                     "개요": overview,
                     "포스터": poster
                 })
+
+                if len(results) >= max_results:
+                    driver.quit()  # ✅ 드라이버를 여기서 미리 종료
+                    return results  # ✅ 함수 자체를 바로 종료
+
+        if len(results) >= max_results:  # ✅ 루프 종료 조건 추가
+            break
 
         # 다음 페이지 이동 시도
         try:
@@ -71,7 +79,6 @@ def crawl_movies_fixed_scroll(keyword, max_pages=8, scroll_position=800):
             page += 1  # 페이지 번호 증가
             time.sleep(2)  # 페이지 로딩 대기
         except NoSuchElementException:  # 다음 버튼이 없는 경우
-            print("❌ 다음 버튼이 없습니다.")  # 에러 메시지 출력
             break
 
     driver.quit()  # 드라이버 종료 (브라우저 닫기)
@@ -82,9 +89,14 @@ if __name__ == "__main__":
         print(json.dumps({"error": "검색어 인자가 없습니다."}, ensure_ascii=False))
         sys.exit(1)
 
-    input_title = sys.argv[1].strip()
+    input_title = sys.argv[1]
+    keyword = input_title.strip().lower()  # 사용자에게 키워드 입력 받기
 
-    keyword = input_title  # 사용자에게 키워드 입력 받기
+    # ✅ 공백만 입력한 경우 차단
+    if not keyword:
+        print(json.dumps({"message": "❌ 공백만으로는 검색할 수 없습니다."}, ensure_ascii=False))
+        sys.exit(0)
+
     data = crawl_movies_fixed_scroll(keyword)  # 함수 호출하여 영화 데이터 수집
 
     # if data:  # 결과가 있다면 출력
