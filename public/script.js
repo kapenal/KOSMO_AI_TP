@@ -5,7 +5,7 @@ document.getElementById('search_btn').addEventListener('click', async function()
 
     try {
         // 서버로 POST 요청 보내기
-        const response = await fetch('/do-something', {
+        const response = await fetch('/search_movie', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ text: searchText })
@@ -13,10 +13,12 @@ document.getElementById('search_btn').addEventListener('click', async function()
 
         // 서버로부터 받은 응답에서 searchURL을 확인
         const data = await response.json();
-        console.log("encodeURI : ", data.search_url)
-        if (data.search_url) {
+        console.log("encodeURI : ", data.movie)
+        if (data.movie) {
+        const movieString = JSON.stringify(data.movie);  // 객체 → 문자열
+            // const encodedMovie = encodeURIComponent(movieString);  // 문자열 → URL 안전하게 인코딩
             // searchURL을 parameter로 붙여서 search.html로 이동
-            window.location.href = `search_list.html?search_url=${encodeURIComponent(data.search_url)}`;
+            window.location.href = `search_list.html?search_movie=${encodeURIComponent(movieString)}`;
         }
     } catch (error) {
         console.error('서버 오류:', error);

@@ -12,24 +12,23 @@ app.use(express.json());
 app.use(express.static('public')); // index.html과 script.js를 제공
 
 // POST 요청 처리
-app.post('/do-something', (req, res) => {
+app.post('/search_movie', (req, res) => {
     const searchText = req.body.text;  // 클라이언트에서 보낸 'text' 값
     console.log(searchText + ' 버튼이 클릭되었어요!');
 
     // Python 스크립트 실행
     const pythonProcess = spawn(
         "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        [path.join(__dirname, "public", "main.py"), searchText]
+        [path.join(__dirname, "public", "search_movies.py"), searchText]
     );
     
     // Python 프로세스 실행 후 결과 처리
     pythonProcess.stdout.on('data', (data) => {
         try {
             const output = JSON.parse(data.toString()); // 반환된 main.py의 search_url이 data 매개변수로 받아옴
-            const searchURL = output.search_url;  // search_url의 값만 따로 searchURL에 넣어줌
-
+            console.log("movie_title", output)
             // searchURL을 클라이언트(script.js) 반환
-            res.json({ search_url: searchURL });
+            res.json({ movie : output });
         } catch (error) {
             console.error('JSON 파싱 오류:', error);
             res.status(500).json({ error: 'Python 결과 처리 중 오류 발생' });
