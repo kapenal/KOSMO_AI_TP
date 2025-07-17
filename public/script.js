@@ -18,7 +18,9 @@ document.getElementById('search_btn').addEventListener('click', async function()
         const movieString = JSON.stringify(data.movie);  // 객체 → 문자열
             // const encodedMovie = encodeURIComponent(movieString);  // 문자열 → URL 안전하게 인코딩
             // searchURL을 parameter로 붙여서 search.html로 이동
-            window.location.href = `search_list.html?search_movie=${encodeURIComponent(movieString)}`;
+            // window.location.href = `search_list.html?search_movie=${encodeURIComponent(movieString)}`;
+            window.location.href = `search_list.html?search_movie=${encodeURIComponent(movieString)}&keyword=${encodeURIComponent(searchText)}`;
+
         }
     } catch (error) {
         console.error('서버 오류:', error);
