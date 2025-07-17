@@ -7,18 +7,51 @@
     </head>
     <body>
         <input type="text" id="search_text" placeholder="검색어를 입력하세요">
+        <button id="search_btn">검색</button>
+        <div id="recommend_container" style="display: flex; flex-wrap: wrap;"></div>
     </body>
     <script>
-        window.onload = function() {
+        window.onload = function () {
             const recommendData = JSON.parse(localStorage.getItem('recommendData'));
 
             if (recommendData && recommendData.recommendations) {
                 console.log("추천 데이터:", recommendData);
-                // 추천 데이터의 input_title을 input에 넣기
+
+                // 검색어 input에 값 넣기
                 document.getElementById('search_text').value = recommendData.input_title || '';
+
+                // 추천 영화들 반복 렌더링
+                const container = document.getElementById('recommend_container');
+                container.innerHTML = ''; // 기존 내용 초기화
+
+                recommendData.recommendations.forEach((movie, index) => {
+                    const movieDiv = document.createElement('div');
+                    movieDiv.style.cssText = "width: 20%; padding: 10px; box-sizing: border-box;";
+
+                    movieDiv.innerHTML = `
+                        <img src="${movie.poster_path}" style="width: 200px%; height: 300px;" alt="${movie.title_ko}">
+                        <p><strong>제목:</strong> ${movie.title_ko}</p>
+                        <p><strong>장르:</strong> ${(movie.genres || []).join(', ')}</p>
+                        <p><strong>개봉일:</strong> ${movie.release_date}</p>
+                        <p><strong>평점:</strong> ${movie.vote_average.toFixed(1)}</p>
+                    `;
+
+                    container.appendChild(movieDiv);
+                });
             } else {
-                console.error("추천 데이터가 없습니다.");
+                    console.error("추천 데이터가 없습니다.");
             }
         };
+
+        // // 검색어 input에 값이 변경되면 localStorage에 저장
+        // document.getElementById('search_text').addEventListener('input', function() {
+        //     localStorage.setItem('search_text', this.value);
+        // });
+
+        // // 페이지 로드 시 localStorage에서 검색어 불러오기
+        // const savedSearchText = localStorage.getItem('search_text');
+        // if (savedSearchText) {
+        //     document.getElementById('search_text').value = savedSearchText;
+        // }
     </script>
 </html>
