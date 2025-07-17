@@ -6,16 +6,39 @@
     <title>검색 결과</title>
     <script>
         // 페이지 로드 시 search_text을 받아서 input에 넣어주기
-        window.onload = function() {
-            // URL 파라미터에서 search_text 값 가져오기
+        window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const searchText = urlParams.get('search_url');
-            
-            if (searchText) {
-                // <input>에 search_text 값 설정
-                document.getElementById('search_text').value = searchText;
+            const encodedMovieData = urlParams.get('search_movie');
+
+            console.log("📦 인코딩된 데이터:", encodedMovieData);
+
+            if (encodedMovieData) {
+                try {
+                    const movieData = JSON.parse(decodeURIComponent(encodedMovieData));
+
+                    if (Array.isArray(movieData)) {
+                        // 영화 리스트일 경우 출력
+                        movieData.forEach(movie => {
+                            console.log("🎬 제목:", movie.제목);
+                            // HTML에 출력
+                            document.getElementById('search_text').value = movie.제목;
+                        });
+                    } else if (movieData.message) {
+                        // 에러 메시지 출력
+                        console.log("❌ 메시지:", movieData.message);
+                        document.getElementById("result").innerText = movieData.message;
+                    } else {
+                        console.log("⚠️ 예상하지 못한 데이터 구조:", movieData);
+                    }
+
+                } catch (e) {
+                    console.error("❌ JSON 파싱 오류:", e);
+                }
+            } else {
+                console.log("⚠️ search_movie 파라미터가 없습니다.");
             }
         };
+
     </script>
 </head>
 <body>
