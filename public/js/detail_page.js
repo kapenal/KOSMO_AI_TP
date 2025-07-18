@@ -28,6 +28,5 @@ document.getElementById('detail_btn').addEventListener('click', async function()
         // 에러 처리
     } catch (error) {
         console.error('서버 오류:', error);
-    }``
-    
+    }
 });
