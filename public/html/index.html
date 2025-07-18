@@ -50,7 +50,7 @@
 
         /* 영화 카드 박스: 높이, 배경색, 모서리 둥글게 처리 */
         .movie-card {
-            height: 300px;
+            height: 580px;
             background-color: #f1f1f1; /* 연회색 */
             border-radius: 10px;
         }
@@ -122,12 +122,12 @@
     </section>
 
     <!-- 현재 상영작 섹션 (디자인만 되어있고 실제 데이터는 아직 없음) -->
-    <section class="now-playing">
+    <!-- <section class="now-playing">
         <div class="container">
             <h3 class="fw-bold mb-3">현재 상영작</h3>
             <p class="text-muted mb-5">지금 극장에서 만날 수 있는 화제작들을 확인해보세요</p>
 
-            <!-- 영화 카드 3개 배치 (컬럼 3개로 나눔) -->
+            영화 카드 3개 배치 (컬럼 3개로 나눔)
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <div class="col">
                     <div class="movie-card"></div>
@@ -140,6 +140,22 @@
                 </div>
             </div>
         </div>
+    </section> -->
+
+    <!-- 현재 상영작 섹션 (로딩 표시 포함 + 동적 데이터 영역) -->
+    <section class="now-playing">
+    <div class="container">
+        <h3 class="fw-bold mb-3">현재 상영작</h3>
+        <p class="text-muted mb-5">지금 극장에서 만날 수 있는 화제작들을 확인해보세요</p>
+
+        <!-- 로딩 표시 영역 -->
+        <div id="loading-spinner" style="text-align: center; padding: 30px;">
+        <span>🎬 현재 상영작을 불러오는 중입니다...</span>
+        </div>
+
+        <!-- 동적 영화 카드 출력 영역 -->
+        <div class="row row-cols-1 row-cols-md-3 g-4"></div>
+    </div>
     </section>
 
     <!-- Bootstrap JavaScript 기능 로드 -->
@@ -156,5 +172,7 @@
 
     <!-- 외부 검색 처리용 JS 파일 (클릭 이벤트 처리 등) -->
     <script src="../js/search.js"></script>
+    <script src="../js/index_now_screen.js" defer></script>
+    
 </body>
 </html>

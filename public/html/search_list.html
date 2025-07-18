@@ -112,11 +112,16 @@
                 results.movies.forEach(movie => {
                     const movieDiv = document.createElement('div');
                     movieDiv.style.cssText = "width: 20%; padding: 10px; box-sizing: border-box;";
+                    // movieDiv.onclick = f
 
                     movieDiv.innerHTML = `
-                        <img src="${movie.img}" style="width: 200px; height: 300px;" alt="${movie.title}">
-                        <p><strong>제목:</strong> ${movie.title}</p>
-                        <p><strong>장르:</strong> ${movie.genres}</p>
+                        <a href="${movie.href}" style="text-decoration: none; color: inherit;">
+                            <div>
+                                <img src="${movie.img}" style="width: 200px; height: 300px;" alt="${movie.title}">
+                                <p><strong>제목:</strong> ${movie.title}</p>
+                                <p><strong>장르:</strong> ${movie.genres}</p>
+                            </div>
+                        </a>
                     `;
 
                     container.appendChild(movieDiv);
@@ -138,12 +143,12 @@
     <script src="../js/list_page.js"></script>
 
     <!-- 영화 정보 표시 영역 -->
-    <div id="movie_info">
+    <!-- <div id="movie_info">
         <h2 id="title">🎬 제목</h2>
         <p id="rating">⭐️ 별점</p>
         <p id="overview">📝 개요</p>
         <img id="poster" src="" alt="포스터 이미지" style="max-width:200px;">
-    </div>
+    </div> -->
 
     <!--영화 검색 리스트 영역-->
     <div id="search_result_container" style="display: flex; flex-wrap: wrap;"></div>
