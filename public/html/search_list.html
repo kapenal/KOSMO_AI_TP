@@ -93,28 +93,25 @@
     </script>
 </head>
 <body>
-    <h1>Search Result Page</h1>
-    <form>
-        <p>검색 <input type="text" id="search_text"></p>
-        <button id="search_btn">검색</button>
-    </form>
+    <h1>무비센서스</h1>
+    <p>검색 <input type="text" id="search_text"></p>
+    <button id="search_btn">검색</button>
     <button id="detail_btn">상세 페이지</button>
-    <script src="../js/script.js"></script>
+    <button id="list_btn">리스트 페이지</button>
+    <script src="../js/search.js"></script>
     <script src="../js/detail_page.js"></script>
+    <script src="../js/list_page.js"></script>
 
-    <!-- <script>
-        // 페이지 로드 시 search_url을 받아서 리다이렉트
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchUrl = urlParams.get('search_url');
-            
-            if (searchUrl) {
-                // search_url이 존재하면 해당 URL로 리다이렉트
-                window.location.href = searchUrl;
-            } else {
-                console.error("search_url 파라미터가 없습니다.");
-            }
-        };
-    </script> -->
+    <!-- 영화 정보 표시 영역 -->
+    <div id="movie_info">
+        <h2 id="title">🎬 제목</h2>
+        <p id="rating">⭐️ 별점</p>
+        <p id="overview">📝 개요</p>
+        <img id="poster" src="" alt="포스터 이미지" style="max-width:200px;">
+    </div>
+
+    <!--영화 검색 리스트 영역-->
+    <div id="search_result_container" style="display: flex; flex-wrap: wrap;"></div>
 </body>
+
 </html>
