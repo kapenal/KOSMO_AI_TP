@@ -1,0 +1,34 @@
+body {
+    background-image: url('../img/영화관.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;      /* 화면 전체에 꽉 차게 */
+    background-position: center; /* 중앙 위치 */
+    background-attachment: fixed; /* 스크롤 시 고정 */
+    margin: 0;                   /* body 기본 margin 제거 (필요 시) */
+}
+
+.header-title {
+    border-radius: 10px;         /* 둥근 모서리 */
+    font-size: 20px;             /* 글자 크기 */  
+    max-width: 400px;            /* 박스 최대 너비 */
+    margin: 18px auto;           /* 가운데 정렬 */
+    text-align: center;
+    font-weight: bold;
+    padding: 40px 0 40px;
+    background-color: rgba(248, 249, 250, 0.2);
+    color: azure;    
+}
+
+#bottom-space{
+    display: flex;
+    justify-content: center;  /* 가로 방향 가운데 정렬 */
+    margin-top: 100px;        /* 위쪽 여백 */
+}
+
+.Trend-box {
+    width: 750px;                /* 박스 너비 */
+    padding: 10px;               /*  안쪽 여백 */
+    border-radius: 10px;         /* 둥근 모서리 */
+    background-color: rgba(248, 249, 250, 0.2);
+    /* background: #13264E; */
+}

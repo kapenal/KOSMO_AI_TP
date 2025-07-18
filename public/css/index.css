@@ -1,0 +1,135 @@
+/* 1. CSS 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. 기본 글꼴 및 배경색 */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  line-height: 1.5;
+}
+
+/* 3. 내비게이션 바 스타일 */
+.navbar {
+  background-color: #000000 !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+
+/* 4. 로고 텍스트 및 아이콘 */
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand i {
+  margin-right: 8px;
+  color: #ffd700;
+}
+
+/* 5. 내비게이션 바 안 버튼 스타일 */
+.navbar a.btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+}
+.navbar a.btn:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+/* 6. 검색 섹션 */
+.search-section {
+  padding: 80px 0 150px;
+  background-image: url('/img/index_영화관.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+.search-section h2 {
+  font-size: 3rem;
+  color: #f0f0f0;
+}
+
+.search-section p {
+  color: #c8c8c8 !important;
+}
+
+/* 7. 검색 바 */
+.search-bar {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* 8. 입력창 */
+#search_text {
+  min-width: 200px;
+  min-height: 60px;
+  background-color: #ffffff;
+  border: 1px solid #555;
+  color: #000000;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+}
+
+/* 9. 검색 버튼 */
+#search_btn {
+  min-width: 90px;
+  min-height: 60px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  background-color: #fff;
+}
+
+/* 🔧 10. 버튼 텍스트 가운데 정렬 개선 */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🔧 11. 아이콘 위치 개선 */
+.btn i {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* 12. 보러가기 버튼 */
+.search-bar .btn {
+  min-width: 150px;
+  min-height: 100px;
+  white-space: nowrap;
+  background-color: #fff;
+  color: #000000;
+  font-size: 1.1rem;
+  background-color: rgba(255, 255, 255, 0.4)
+}
+
+.text-gold-icon {
+  color: #ffd700; /* 아이콘만 골드 */
+}
+
+/* 13. 현재 상영작 섹션 */
+.now-playing {
+  padding: 60px 0;
+  background-color: #181818;
+  text-align: center;
+}
+
+.movie-card {
+  height: 580px;
+  background-color: #2c2c2c;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* 14. 회색 설명 글자 */
+.text-muted {
+  color: #b0b0b0 !important;
+}
