@@ -1,0 +1,179 @@
+/* 1. CSS 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. 기본 폰트 및 텍스트 스타일 */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #fff;
+  color: #212529;
+  line-height: 1.5;
+}
+
+/* 3. 로고 아이콘 오른쪽 여백 설정 */
+.navbar-brand i {
+  margin-right: 8px;
+}
+
+/* 4. 검색 영역 섹션 스타일: 배경색, 여백, 가운데 정렬 등 */
+.search-section {
+  padding: 80px 0 40px;
+  background-color: #f8f9fa; /* 연한 회색 배경 */
+  text-align: center;
+}
+
+/* 5. 검색 바 영역: 최대 너비 제한 및 가운데 정렬 */
+.search-bar {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* 6. 현재 상영작 섹션 스타일: 배경색, 여백, 가운데 정렬 */
+.now-playing {
+  padding: 60px 0;
+  background-color: #fff;
+  text-align: center;
+}
+
+/* 7. 영화 카드 박스: 높이, 배경색, 모서리 둥글게 처리 */
+.movie-card {
+  height: 300px;
+  background-color: #f1f1f1; /* 연회색 */
+  border-radius: 10px;
+}
+
+/* 8. 홈/랭킹 버튼에 마우스를 올렸을 때 색상 변화 */
+.navbar a.btn:hover {
+  background-color: #343a40; /* 진한 회색 */
+  color: #fff;               /* 흰색 글자 */
+  transition: 0.3s ease;     /* 부드럽게 전환 */
+}
+
+/* 9. 검색 입력창 최소 너비와 높이 지정 */
+#search_text {
+  min-width: 200px;   /* 원하는 최소 가로 길이 */
+  min-height: 60px;   /* 현재 높이 유지 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+/* 10. 검색 버튼 최소 크기 지정 */
+#search_btn {
+  min-width: 90px;
+  min-height: 60px;
+  box-sizing: border-box;
+  white-space: nowrap; /* 글자가 줄바꿈되지 않도록 */
+}
+
+/* 11. 보러가기 버튼 최소 크기 지정 */
+.search-bar .btn {
+  min-width: 150px;
+  min-height: 45px;
+  white-space: nowrap; /* 글자 줄바꿈 방지 */
+}
+/* 전체 배경과 글자 기본값 설정 */
+body {
+    background-color: #121212;  /* 어두운 회색 배경 */
+    color: #e0e0e0;             /* 밝은 글자색 */
+    font-family: 'Lato', sans-serif;
+}
+
+/* 내비게이션 바 */
+.navbar {
+    background-color: #1c1c1c;
+    border-bottom: 1px solid #333;
+}
+
+.navbar a.navbar-brand {
+    color: #ffffff;
+}
+
+.navbar a.navbar-brand:hover {
+    color: #ffd700; /* 골드 느낌 강조 */
+}
+
+/* 검색 섹션 */
+.search-section {
+    background-color: #1e1e1e;
+}
+
+.search-section h2,
+.search-section p {
+    color: #f0f0f0;
+}
+
+/* 입력창 */
+#search_text {
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    color: #ffffff;
+}
+
+/* 버튼 공통 */
+.btn-dark {
+    background-color: #333 !important;
+    border-color: #444 !important;
+    color: #fff;
+}
+
+.btn-dark:hover {
+    background-color: #555 !important;
+    border-color: #666 !important;
+    color: #fff;
+}
+
+/* 보러가기 버튼 공통 스타일 */
+.search-bar .btn {
+    min-width: 150px;
+    min-height: 45px;
+    white-space: nowrap;
+}
+
+/* 현재 상영작 섹션 */
+.now-playing {
+    background-color: #181818;
+}
+
+.movie-card {
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* 텍스트 강조용 */
+.text-muted {
+    color: #b0b0b0 !important;
+}
+/* 내비게이션 바 */
+.navbar {
+    background-color: #1c1c1c;
+    border-bottom: 1px solid #333;
+}
+
+/* 로고 텍스트 및 아이콘 색상 */
+.navbar-brand {
+    color: #ffffff !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+    color: #ffd700; /* 골드 컬러 아이콘 */
+}
+
+/* 내비 바 안 버튼들 (예: 홈, 랭킹 버튼 있을 경우) */
+.navbar a.btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+}
+
+.navbar a.btn:hover {
+    background-color: #555;
+    color: #fff;
+}
