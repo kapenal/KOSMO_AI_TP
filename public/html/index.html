@@ -19,75 +19,13 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
 
     <!-- 커스텀 스타일시트 (추가적인 스타일을 여기에 분리 작성할 수 있음) -->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
 
-    <!-- 인라인 CSS: 직접 HTML에 삽입된 커스텀 스타일 -->
-    <style>
-        /* 로고 아이콘 오른쪽 여백 설정 */
-        .navbar-brand i {
-            margin-right: 8px;
-        }
-
-        /* 검색 영역 섹션 스타일: 배경색, 여백, 가운데 정렬 등 */
-        .search-section {
-            padding: 80px 0 40px;
-            background-color: #f8f9fa; /* 연한 회색 배경 */
-            text-align: center;
-        }
-
-        /* 검색 바 영역: 최대 너비 제한 및 가운데 정렬 */
-        .search-bar {
-            max-width: 900px;
-            margin: auto;
-        }
-
-        /* 현재 상영작 섹션 스타일: 배경색, 여백, 가운데 정렬 */
-        .now-playing {
-            padding: 60px 0;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        /* 영화 카드 박스: 높이, 배경색, 모서리 둥글게 처리 */
-        .movie-card {
-            height: 580px;
-            background-color: #f1f1f1; /* 연회색 */
-            border-radius: 10px;
-        }
-
-        /* 홈/랭킹 버튼에 마우스를 올렸을 때 색상 변화 */
-        .navbar a.btn:hover {
-            background-color: #343a40; /* 진한 회색 */
-            color: #fff;               /* 흰색 글자 */
-            transition: 0.3s ease;     /* 부드럽게 전환 */
-        }
-        /* 검색 입력창 최소 너비와 높이 지정 */
-        #search_text {
-        min-width: 200px;   /* 원하는 최소 가로 길이 */
-        min-height: 60px;   /* 현재 높이 유지 */
-        box-sizing: border-box; /* 패딩 포함 크기 계산 */
-        }
-
-        /* 검색 버튼 최소 크기 지정 */
-        #search_btn {
-        min-width: 90px;
-        min-height: 60px;
-        box-sizing: border-box;
-        white-space: nowrap; /* 글자가 줄바꿈되지 않도록 */
-        }
-
-        /* 보러가기 버튼 최소 크기 지정 */
-        .search-bar .btn {
-        min-width: 150px;
-        min-height: 45px;
-        white-space: nowrap; /* 글자 줄바꿈 방지 */
-        }
-    </style>
 </head>
 <body>
 
     <!-- 내비게이션 바 영역 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark border-bottom">
         <div class="container d-flex justify-content-between">
             <!-- 로고 -->
             <a class="navbar-brand fw-bold" href="#">
@@ -99,7 +37,9 @@
     <!-- 영화 검색창 섹션 -->
     <section class="search-section">
         <div class="container">
-            <h2 class="fw-bold mb-2">영화를 찾아보세요</h2>
+            <h2 class="fw-bold mb-2 d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-film" style="color: #ffd700; font-size: 2rem;"></i> Movie Sensors
+            </h2>
             <p class="mb-4 text-muted">영화 제목을 입력하면 정보, 후기, 리뷰를 알려드립니다.</p>
             
             <!-- 검색 바 + 버튼 정렬 통합 -->
@@ -114,8 +54,14 @@
 
                 <!-- 보러가기 버튼 2개 -->
                 <div class="d-flex gap-2">
-                    <a href="#" class="btn btn-dark w-100">실시간 랭킹 보러가기</a>
-                    <a href="#" class="btn btn-dark w-100">OTT별 랭킹 보러가기</a>
+                <a href="#" class="btn btn-dark w-100 d-flex flex-column align-items-center justify-content-center py-3">
+                    <i class="bi bi-graph-up-arrow fs-3 mb-1 text-gold-icon"></i>
+                    실시간 랭킹 보러가기
+                </a>
+                <a href="#" class="btn btn-dark w-100 d-flex flex-column align-items-center justify-content-center py-3">
+                    <i class="bi bi-tv me-2  w-100 fs-3 mb-1 text-gold-icon"></i>
+                    OTT별 랭킹 보러가기
+                </a>
                 </div>
             </div>
         </div>
@@ -124,7 +70,7 @@
     <!-- 현재 상영작 섹션 (디자인만 되어있고 실제 데이터는 아직 없음) -->
     <!-- <section class="now-playing">
         <div class="container">
-            <h3 class="fw-bold mb-3">현재 상영작</h3>
+            <h3 class="fw-bold mb-2">현재 상영작</h3>
             <p class="text-muted mb-5">지금 극장에서 만날 수 있는 화제작들을 확인해보세요</p>
 
             영화 카드 3개 배치 (컬럼 3개로 나눔)
