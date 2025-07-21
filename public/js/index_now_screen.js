@@ -32,10 +32,11 @@ window.onload = async () => {
             card.innerHTML = `
                 <img src="${movie.포스터 !== "이미지 없음" ? movie.포스터 : 'https://via.placeholder.com/200x300?text=No+Image'}"
                     alt="${movie.제목}"
-                    style="width:304px; height: 436px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                    style="width:304px; height: 436px; object-fit: cover; border-radius: 10px 10px 10px 10px;">
                 <h5 class="mt-2">${movie.제목}</h5>
-                <p>⭐ 별점: ${movie.별점 || '정보 없음'}</p>
                 <p>${movie.개요 || ''}</p>
+                <p>⭐ 별점: ${movie.별점 || '정보 없음'}</p>
+                
             `;
 
             col.appendChild(card);
