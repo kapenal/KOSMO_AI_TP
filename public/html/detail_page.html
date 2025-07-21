@@ -22,8 +22,7 @@
   <main class="container py-5">
 
     <!-- ✅ 첫 줄: 포스터 + 영화 정보 + 감정분포 -->
-    <div class="d-flex flex-column flex-md-row gap-4 mb-4 align-items-start">
-
+    <div class="d-flex flex-column flex-md-row gap-4 mb-4 align-items-start gap-md-20">
       <!-- 포스터 -->
       <div class="poster-placeholder flex-shrink-0">
         <img id="poster" src="" alt="영화 포스터" class="img-fluid rounded d-none" />
@@ -37,13 +36,13 @@
         <p><strong>평점:</strong> <span id="rating_value">-</span></p>
         <p><strong>개봉일:</strong> <span id="release_date">-</span></p>
 
-        <div class="bg-sub p-3 mt-3 rounded">
+        <div class="bg-sub p-3 mt-3 rounded flex-grow-1">
           <p id="overview" class="text-light">줄거리 로딩 중...</p>
         </div>
       </div>
 
       <!-- 감정 분석 -->
-      <div class="box flex-fill">
+      <div class="box flex-fill emotion-box justify-content-between">
         <h5 class="text-white mb-3">리뷰 감정 분포</h5>
         <canvas id="emotionChart" width="100%" height="200"></canvas>
         <div class="text-muted small mt-3">
@@ -66,10 +65,14 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="box h-100">
+        <div class="box h-100 d-flex flex-column">
           <h5 class="text-white mb-3">사람들 리뷰</h5>
-          <div id="review_list">
+
+          <div class="review-scroll-box flex-grow-1">
+            <div id="review_list">
+              <p id="empty_review">아직 리뷰가 없습니다.</p>
             <!-- 리뷰 항목 동적 추가 -->
+            </div>
           </div>
         </div>
       </div>
@@ -79,11 +82,11 @@
     <div class="box">
       <h5 class="text-white mb-3">추천 영화</h5>
       <div class="d-flex justify-content-between flex-wrap" id="recommend_list">
+        <!-- <div class="recommend-item bg-secondary"></div>
         <div class="recommend-item bg-secondary"></div>
         <div class="recommend-item bg-secondary"></div>
         <div class="recommend-item bg-secondary"></div>
-        <div class="recommend-item bg-secondary"></div>
-        <div class="recommend-item bg-secondary"></div>
+        <div class="recommend-item bg-secondary"></div> -->
       </div>
     </div>
 
