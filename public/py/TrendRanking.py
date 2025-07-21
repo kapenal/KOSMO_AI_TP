@@ -2,8 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import time, os
-from bs4 import BeautifulSoup
+import time
 
 options = Options()
 options.add_argument('--headless')
@@ -52,7 +51,8 @@ for div in soup.select('div.responsive-image__image-container:not(.responsive-im
 ranklist = list(zip(rankNum, title, type, poster_img))
 print(ranklist)
 
-import json
+# -----------------------------------------------------------------------json 으로 변환
+import json, os
 
 folder_path = "public/mj_data"
 json_path = os.path.join(folder_path, "TrendRanking.json")
