@@ -40,10 +40,12 @@
           <button class="btn btn-dark" id="search_btn" style="height: 60px; width: 120px;">
             <i class="bi bi-search"></i> 검색
           </button>
+          <!-- 임시 디테일 페이지 -->
+          <button id="detail_btn" class="btn btn-secondary" style="height: 60px; width: 120px;">
         </div>
-      </div>
+      </div>        
 
-      <!-- ✅ 검색 결과 표시 영역 -->
+    <!-- ✅ 검색 결과 표시 영역 -->
       <div id="search_result_container" class="row g-4"></div>
 
     </div>
@@ -73,7 +75,7 @@
           const col = document.createElement('div');
           col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
-            <a href="${movie.href}" style="text-decoration: none;">
+            <a href="/movie/${movie.href}" style="text-decoration: none;">
               <div class="movie-card h-100">
                 <img src="${movie.img}" alt="${movie.title}">
                 <h5 class="mt-2">${movie.title}</h5>
