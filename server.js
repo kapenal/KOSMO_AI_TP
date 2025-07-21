@@ -185,13 +185,53 @@ app.get('/api/movie/:id', (req, res, next) => {
     });
 });
 
+app.get('/api/review/:id', (req, res) => {
+    const movieId = req.params.id;
+    console.log(`리뷰 요청 받은 movieId: ${movieId}`);
+
+    const python = spawn('python', [path.join(__dirname, 'public', 'py', 'movie_detail_review.py'), movieId]);
+
+    let data = '';
+    let error = '';
+
+    python.stdout.on('data', chunk => {
+        data += chunk.toString();
+    });
+
+    python.stderr.on('data', chunk => {
+        error += chunk.toString();
+    });
+
+    python.on('close', code => {
+        if (code !== 0) {
+            console.error(`Python 프로세스 종료 코드: ${code}`);
+            console.error('stderr:', error);
+            return res.status(500).json({ error: 'Python 실행 실패' });
+        }
+
+        if (error) {
+            console.error('Python STDERR:', error);
+        }
+
+        try {
+            const reviews = JSON.parse(data);
+            console.log("영화 리뷰 데이터:", reviews);
+            res.json(reviews);
+        } catch (e) {
+            console.error('JSON 파싱 실패:', e);
+            console.error('원본 데이터:', data);
+            res.status(500).json({ error: '응답 처리 실패' });
+        }
+    });
+});
+
 // 미주꺼--------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 
 // TrendList.html 보여주기
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'html', 'TrendList.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'html', 'TrendList.html'));
+// });
 //-------------------------------------------------------
 
 

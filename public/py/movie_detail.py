@@ -17,6 +17,7 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
+
 # 인자 확인
 movie_id = sys.argv[1]
 url = f'https://m.kinolights.com/title/{movie_id}'
@@ -70,6 +71,9 @@ staff = title_tag.get_text(strip=True) if title_tag else ""
 # 줄거리
 overview_tag = soup.select_one('.synopsis__text-wrap')
 overview = overview_tag.get_text(strip=True) if overview_tag else ""
+
+if overview.endswith("더보기"):
+    overview = overview[:-3]
 
 driver.quit()
 
