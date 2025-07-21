@@ -1,16 +1,18 @@
 body {
-  background-image: url('/img/영화관.jpg');
+  background-image: url('/img/index_영화관.jpg');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   font-family: 'Lato', sans-serif;
   color: #ffffff;
+  margin: 0;
+  min-height: 100vh;
 }
 
 .navbar {
   background-color: #000000 !important;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff !important;
 }
 
 .navbar-brand {
@@ -22,7 +24,7 @@ body {
 
 .navbar-brand i {
   margin-right: 8px;
-  color: #ffd700;
+  color: #ffd700 !important
 }
 
 /* 공통 박스: 밝은 회색 반투명 느낌 */
@@ -31,12 +33,22 @@ body {
   color: #ffffff;
   padding: 20px;
   border-radius: 10px;
+  margin: 0;
+  box-sizing: border-box;
 }
 
+/* 줄거리 박스 배경 */
 .bg-sub {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.3) !important;
   padding: 10px;
   border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 80px; /* 줄거리 없을 때 적당한 높이 유지 */
+}
+
+.bg-sub p {
+  margin-bottom: 0;
 }
 
 .poster-placeholder {
@@ -47,24 +59,107 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .poster-placeholder img {
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 450px;
   object-fit: cover;
   border-radius: 10px;
 }
 
 .poster-placeholder span {
-  font-size: 0.9rem;
+  font-size: 14px;
   color: #aaa;
+}
+
+/* 첫 줄 컨테이너: 세 박스 높이 맞추기 */
+.d-flex.flex-md-row {
+  gap: 20px;
+  align-items: stretch; /* 세 박스 높이 맞춤 */
 }
 
 /* 영화 정보 박스 */
 .movie-info-box {
-  width: 100%;
-  max-width: 340px;
+  width: 310px;
+  max-width: 310px;
+  height: 450px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 감정 분석 박스 */
+.emotion-box {
+  height: 450px;
+  overflow: visible; /* 스크롤 제거 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* space-between → flex-start로 변경 */
+  gap: 8px;
+}
+
+.emotion-box canvas {
+  flex-shrink: 0;
+  max-height: 220px;
+  width: 300px !important;
+}
+
+/* 감정 분포 범례 */
+.emotion-box .legend {
+  margin-top: 0;
+  color: #bbb;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.emotion-box .legend > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.emotion-box .legend .badge {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+/* 두 번째 줄 리뷰 박스 */
+.row.g-4 > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.row.g-4 > div > .box {
+  flex-grow: 1;
+  height: 450px; /* 첫 줄 박스 높이와 동일 */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 리뷰 리스트 스크롤 */
+.review-scroll-box {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  min-height: 0;
+  max-height: 230px;
+  background-color: rgba(255, 255, 255, 0.3); /* ✅ 살짝 진한 배경 */
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+#review_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0; /* ★ 스크롤 가능하도록 설정 */
 }
 
 /* 버튼 스타일 */
@@ -99,7 +194,7 @@ body {
   margin-bottom: 10px;
 }
 .review-item .review-meta {
-  font-size: 0.9rem;
+  font-size: 14px;
   color: #aaa;
 }
 .review-item .review-score {
