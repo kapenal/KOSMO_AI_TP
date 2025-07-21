@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
 
     <!-- 커스텀 스타일시트 (추가적인 스타일을 여기에 분리 작성할 수 있음) -->
-    <link href="css/index.css" rel="stylesheet" />
+    <link href="/css/index.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -38,9 +38,9 @@
     <section class="search-section">
         <div class="container">
             <h2 class="fw-bold mb-2 d-flex align-items-center justify-content-center gap-2">
-                <i class="bi bi-film" style="color: #ffd700; font-size: 2rem;"></i> Movie Sensors
+                <i class="bi bi-film" style="color: #ffd700; font-size: 3rem;"></i> Movie Sensors
             </h2>
-            <p class="mb-4 text-muted">영화 제목을 입력하면 정보, 후기, 리뷰를 알려드립니다.</p>
+            <p class="mb-4 text-muted">영화 제목만 알려주면, 솔직한 후기와 정확한 정보를 바로 전해드려요. 😎</p>
             
             <!-- 검색 바 + 버튼 정렬 통합 -->
             <div class="search-bar mx-auto" style="width: 700px ;"> <!-- mx-auto는 가운데 정렬 -->
@@ -68,12 +68,12 @@
     </section>
 
     <!-- 현재 상영작 섹션 (디자인만 되어있고 실제 데이터는 아직 없음) -->
-    <section class="now-playing">
+    <!-- <section class="now-playing">
         <div class="container">
             <h3 class="fw-bold mb-2">현재 상영작</h3>
             <p class="text-muted mb-5">지금 극장에서 만날 수 있는 화제작들을 확인해보세요</p>
 
-            <!-- 영화 카드 3개 배치 (컬럼 3개로 나눔) -->
+            영화 카드 3개 배치 (컬럼 3개로 나눔)
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <div class="col">
                     <div class="movie-card"></div>
@@ -86,6 +86,22 @@
                 </div>
             </div>
         </div>
+    </section> -->
+
+    <!-- 현재 상영작 섹션 (로딩 표시 포함 + 동적 데이터 영역) -->
+    <section class="now-playing">
+    <div class="container">
+        <h3 class="fw-bold mb-3">현재 상영작</h3>
+        <p class="text-muted mb-5">지금 극장에서 만날 수 있는 화제작들을 확인해보세요</p>
+
+        <!-- 로딩 표시 영역 -->
+        <div id="loading-spinner" style="text-align: center; padding: 30px;">
+        <span>🎬 현재 상영작을 불러오는 중입니다...</span>
+        </div>
+
+        <!-- 동적 영화 카드 출력 영역 -->
+        <div class="row row-cols-1 row-cols-md-3 g-4"></div>
+    </div>
     </section>
 
     <!-- Bootstrap JavaScript 기능 로드 -->
@@ -102,5 +118,18 @@
 
     <!-- 외부 검색 처리용 JS 파일 (클릭 이벤트 처리 등) -->
     <script src="../js/search.js"></script>
+    
+    <!-- 엔터키 감지 스크립트 추가 -->
+    <script>
+        document.getElementById('search_text').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('search_btn').click();
+            }
+        });
+    </script>
+
+    <script src="../js/index_now_screen.js" defer></script>
+    
 </body>
 </html>
