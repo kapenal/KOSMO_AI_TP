@@ -7,20 +7,20 @@ window.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(movie => {
       // 영화 정보 삽입
-      document.getElementById('title_ko').textContent = `[${movie.제목}]`;
+      document.getElementById('title_ko').textContent = `${movie.제목}`;
       // document.getElementById('title_en').textContent = movie.영문제목 || '';
-      document.getElementById('release_date').textContent = `개봉일: ${movie.연도}`;
+      document.getElementById('release_date').textContent = `${movie.연도}`;
       // document.getElementById('runtime').textContent = `상영시간: ${movie.상영시간 || '-'}분`;
       document.getElementById('rating_value').textContent = `${movie.평점}`;
-      document.getElementById('director').textContent = movie.감독 || '-';
+      // document.getElementById('director').textContent = movie.감독 || '-';
       // document.getElementById('actors').textContent = (movie.출연진 || []).join(', ');
       document.getElementById('overview').textContent = movie.줄거리 || '줄거리 정보가 없습니다.';
-
+      document.getElementById('genres').textContent = movie.장르.join(', ');
       // // 장르 뱃지
       // const genreContainer = document.getElementById('genre_badges');
       // genreContainer.innerHTML = '';
       // (movie.장르 || []).forEach(genre => {
-      //   const span = document.createElement('span');
+      //   const span = document.createElement('span'); 
       //   span.className = 'badge bg-secondary me-1';
       //   span.textContent = genre;
       //   genreContainer.appendChild(span);
@@ -90,24 +90,25 @@ window.onload = function () {
         console.log("추천 데이터:", recommendData);
 
         // document.getElementById('search_text').value = recommendData.input_title || '';
-
         const container = document.getElementById('recommend_list');
-        container.innerHTML = '';
 
-        recommendData.recommendations.forEach((movie, index) => {
-          const movieDiv = document.createElement('div');
-          movieDiv.style.cssText = "width: 20%; padding: 10px; box-sizing: border-box;";
+        container.innerHTML = ''; // 기존 추천 영화 지우기
 
-          movieDiv.innerHTML = `
-            <a href="/movie/${movie.link}?title=${encodeURIComponent(movie.title_ko)}" style="text-decoration: none;">
-              <img src="${movie.poster_path}" style="width: 200px; height: 300px;" alt="${movie.title_ko}">
-              <p><strong>제목:</strong> ${movie.title_ko}</p>
-              <p><strong>장르:</strong> ${(movie.genres || []).slice(0, 2).join(', ')}</p>
+      recommendData.recommendations.forEach((movie, index) => {
+        const movieDiv = document.createElement('div'); // ✅ 반복 안에서 새로 생성
+        movieDiv.className = 'recommend-item bg-secondary';
+        movieDiv.style.cssText = "width: 220px; height: 350px; text-align: center; padding: 10px; box-sizing: border-box;";
+
+        movieDiv.innerHTML = `
+            <a href="/movie/${movie.link}?title=${encodeURIComponent(movie.title_ko)}" style="text-decoration: none; color: inherit;">
+              <img src="${movie.poster_path}" style="width: 150px; height: 250px;" alt="${movie.title_ko}">
+              <p align="center"><strong>제목:</strong> ${movie.title_ko}</p>
+              <p align="center"><strong>장르:</strong> ${(movie.genres || []).slice(0, 2).join(', ')}</p>
             </a>
-          `;
+        `;
 
-          container.appendChild(movieDiv);
-        });
+        container.appendChild(movieDiv);
+      });
       })
       .catch(err => {
         console.error("추천 영화 불러오기 실패:", err);
