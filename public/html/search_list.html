@@ -57,26 +57,21 @@
   <script src="../js/detail_page.js"></script>
   <script src="../js/list_page.js"></script>
 
-  <!-- ✅ 검색 결과 렌더링 스크립트 -->
+  <!-- ✅ 검색 결과 렌더링 및 엔터키 이벤트 추가 -->
   <script>
-    window.onload = function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('search_text');
+      const searchBtn = document.getElementById('search_btn');
+      const container = document.getElementById('search_result_container');
+
+      // 이전 검색 데이터 복원
       const searchData = JSON.parse(localStorage.getItem('searchData'));
-
       if (searchData && searchData.searchResult) {
-        const searchText = searchData.input_title;
-        const results = searchData.searchResult;
-
-        // 검색창에 이전 검색어 복원
-        document.getElementById('search_text').value = searchText || '';
-
-        const container = document.getElementById('search_result_container');
+        searchInput.value = searchData.input_title || '';
         container.innerHTML = '';
-
-        // 각 영화 정보를 카드 형태로 생성
-        results.movies.forEach(movie => {
+        searchData.searchResult.movies.forEach(movie => {
           const col = document.createElement('div');
           col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
-
           col.innerHTML = `
             <a href="${movie.href}" style="text-decoration: none;">
               <div class="movie-card h-100">
@@ -84,17 +79,26 @@
                 <h5 class="mt-2">${movie.title}</h5>
                 <p class="text-muted small">${movie.genres}</p>
               </div>
-            </a>
-          `;
+            </a>`;
           container.appendChild(col);
         });
-
       } else {
-        // 검색 결과가 없을 경우 메시지 표시
-        document.getElementById('search_result_container').innerHTML =
-          '<p class="text-center text-danger">검색 결과가 없습니다.</p>';
+        container.innerHTML = '<p class="text-center text-danger">검색 결과가 없습니다.</p>';
       }
-    };
+
+      // 엔터키 누르면 검색 버튼 클릭
+      if (searchInput) {
+        searchInput.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            if (searchBtn) {
+              searchBtn.click();
+            }
+          }
+        });
+      }
+    });
   </script>
+
 </body>
 </html>
