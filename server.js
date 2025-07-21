@@ -133,6 +133,52 @@ app.post('/do-recommend', (req, res) => {
     });
 });
 
+// 상세 페이지 HTML 제공
+app.get('/movie/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'html', 'detail_page.html'));
+});
+
+// 영화 상세 데이터 API
+app.get('/api/movie/:id', (req, res) => {
+  const movieId = req.params.id;
+  console.log(`API 요청 받은 movieId: ${movieId}`);
+
+  const python = spawn('python', [path.join(__dirname, 'public', 'py', 'movie_detail.py'), movieId]);
+
+  let data = '';
+  let error = '';
+
+  python.stdout.on('data', chunk => {
+    data += chunk.toString();
+  });
+
+  python.stderr.on('data', chunk => {
+    error += chunk.toString();
+  });
+
+  python.on('close', code => {
+    if (code !== 0) {
+      console.error(`Python 프로세스 종료 코드: ${code}`);
+      console.error('stderr:', error);
+      return res.status(500).json({ error: 'Python 실행 실패' });
+    }
+
+    if (error) {
+      console.error('Python STDERR:', error);
+    }
+
+    try {
+      const movie = JSON.parse(data);
+    //   console.log("영화 상세 데이터:", movie);
+      res.json(movie);
+    } catch (e) {
+      console.error('JSON 파싱 실패:', e);
+      console.error('원본 데이터:', data);
+      res.status(500).json({ error: '응답 처리 실패' });
+    }
+  });
+});
+
 // 서버 시작
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
