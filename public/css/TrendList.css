@@ -1,19 +1,45 @@
-/* 헤더 */
+/* 1. CSS 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. 기본 글꼴 및 배경색 */
+body {
+  font-family: 'Lato', sans-serif;
+  background-image: url('../img/영화관.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #e0e0e0;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 3. 내비게이션 바 스타일 */
 .navbar {
   background-color: #000000 !important;
   border-bottom: 2px solid #ffffff !important;
+  font-family: 'Lato', sans-serif;
 }
+
+/* 4. 로고 텍스트 및 아이콘 */
 .navbar-brand {
   color: #ffffff !important;
   font-weight: bold;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
+  font-family: 'Lato', sans-serif;
 }
 .navbar-brand i {
   margin-right: 8px;
   color: #ffd700;
 }
+
+/* 5. 내비게이션 바 안 버튼 스타일 (필요시) */
 .navbar a.btn {
   background-color: #333;
   color: #fff;
@@ -24,52 +50,39 @@
   color: #fff;
 }
 
-
-/* 본문 */
-
-body {
-    background-image: url('../img/영화관.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;      /* 화면 전체에 꽉 차게 */
-    background-position: center; /* 중앙 위치 */
-    background-attachment: fixed; /* 스크롤 시 고정 */
-    margin: 0;                   /* body 기본 margin 제거 (필요 시) */
-}
-
+/* 6. 본문 스타일 - 기존 랭킹페이지 유지 */
 #top-space {
   margin-top: 50px;
 }
 
 .header-title {
-    border-radius: 10px;         /* 둥근 모서리 */
-    font-size: 20px;             /* 글자 크기 */  
-    max-width: 400px;            /* 박스 최대 너비 */
-    margin: 15px auto;           /* 가운데 정렬 */
-    text-align: center;
-    font-weight: bold;
-    padding: 30px 0 30px;
-    background-color: rgba(248, 249, 250, 0.2);
-    color: azure;    
+  border-radius: 10px;
+  font-size: 20px;
+  max-width: 400px;
+  margin: 15px auto;
+  text-align: center;
+  font-weight: bold;
+  padding: 30px 0 30px;
+  background-color: rgba(248, 249, 250, 0.2);
+  color: azure;
 }
 
-#bottom-space{
-    display: flex;
-    justify-content: center;  /* 가로 방향 가운데 정렬 */
-    margin-top: 75px;        /* 위쪽 여백 */
+#bottom-space {
+  display: flex;
+  justify-content: center;
+  margin-top: 75px;
 }
 
 .Trend-box {
-    width: 750px;                /* 박스 너비 */
-    padding: 10px;               /*  안쪽 여백 */
-    border-radius: 10px;         /* 둥근 모서리 */
-    background-color: rgba(248, 249, 250, 0.2);
-    /* background: #13264E; */
+  width: 750px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(248, 249, 250, 0.2);
 }
 
 #date-display {
-    color: grey;
-    margin-bottom: 30px;
-
+  color: grey;
+  margin-bottom: 30px;
 }
 
 .trend_item {
@@ -110,7 +123,7 @@ body {
   width: 80px;
   height: 120px;
   object-fit: cover;
-  border-radius: 6px; /* 선택사항: 모서리 둥글게 */
+  border-radius: 6px;
 }
 
 .info {
