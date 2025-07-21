@@ -96,9 +96,13 @@ app.post('/do-recommend', (req, res) => {
     const searchText = req.body.text;
     console.log(searchText + ' detail page에서 버튼이 클릭되었어요!');
 
+    // const pythonProcess = spawn(
+    //     "python",
+    //     [path.join(__dirname, "public",  "py", "recommend.py"), searchText]
+    // );
     const pythonProcess = spawn(
-        "python",
-        [path.join(__dirname, "public",  "py", "recommend.py"), searchText]
+        "C:\\ProgramData\\anaconda3\\python.exe",  // ← Anaconda의 Python 경로
+        [path.join(__dirname, "public", "py", "recommend.py"), searchText]
     );
 
     let dataBuffer = "";
