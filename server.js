@@ -134,7 +134,19 @@ app.post('/do-recommend', (req, res) => {
     });
 });
 
+// 미주꺼--------------------------------------------------
+app.use(express.static(path.join(__dirname, 'public')));
+
+// TrendList.html 보여주기
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'TrendList.html'));
+});
+//-------------------------------------------------------
+
+
 // 서버 시작
 app.listen(port, () => {
     console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
+
+
