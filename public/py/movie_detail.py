@@ -56,6 +56,21 @@ year = year_tag.get_text(strip=True) if year_tag else ""
 rating_tag = soup.select_one('.score')  # 실제 클래스명 확인 필요
 rating = rating_tag.get_text(strip=True) if rating_tag else ""
 
+# 이미지
+img_tag = soup.select_one('.poster img')  # 더 유연한 셀렉터
+if img_tag and img_tag.has_attr('src'):
+    img = img_tag['src']
+else:
+    img = None
+
+# 감독
+staff_tag = soup.select_one('.staffList_0')
+staff = title_tag.get_text(strip=True) if title_tag else ""
+
+# 줄거리
+overview_tag = soup.select_one('.synopsis__text-wrap')
+overview = overview_tag.get_text(strip=True) if overview_tag else ""
+
 driver.quit()
 
 # 결과를 딕셔너리로 정리
@@ -63,7 +78,10 @@ movie_info = {
     "제목": title or "정보 없음",
     "장르": genres,
     "연도": year or "정보 없음",
-    "평점": rating or "정보 없음"
+    "평점": rating or "정보 없음",
+    "포스터": img or "정보 없음",
+    "감독" : staff or "정보 없음",
+    "줄거리" : overview or "정보 없음"
 }
 
 # JSON 문자열 출력 (한글 깨짐 방지용 ensure_ascii=False)

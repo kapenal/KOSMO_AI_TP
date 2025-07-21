@@ -66,7 +66,7 @@
       const searchBtn = document.getElementById('search_btn');
       const container = document.getElementById('search_result_container');
 
-      // 이전 검색 데이터 복원
+      // 영화 리스트
       const searchData = JSON.parse(localStorage.getItem('searchData'));
       if (searchData && searchData.searchResult) {
         searchInput.value = searchData.input_title || '';
@@ -75,7 +75,7 @@
           const col = document.createElement('div');
           col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
           col.innerHTML = `
-            <a href="/movie/${movie.link}" style="text-decoration: none;">
+            <a href="/movie/${movie.link}?title=${encodeURIComponent(movie.title)}" style="text-decoration: none;">
               <div class="movie-card h-100">
                 <img src="${movie.img}" alt="${movie.title}">
                 <h5 class="mt-2">${movie.title}</h5>
