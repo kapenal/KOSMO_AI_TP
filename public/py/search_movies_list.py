@@ -35,7 +35,7 @@ if search_div:
     movies = []
     a_tags = search_div.find_all("a")  # 모든 a 태그
     for a in a_tags:
-        href = a.get('href')
+        href = a.get('href').split("/")[-1]
         title_tag = a.select_one('.metadata__title')
         genres_tag = a.select_one('.metadata__subtitle')
         img = a.select_one('img')['src'] if a.select_one('img') else ''

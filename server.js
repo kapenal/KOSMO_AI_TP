@@ -92,48 +92,96 @@ app.post('/search_movie', (req, res) => {
 
 
 // POST 요청 처리 - 영화 추천
-app.post('/do-recommend', (req, res) => {
-    const searchText = req.body.text;
-    console.log(searchText + ' detail page에서 버튼이 클릭되었어요!');
+app.get('/api/recommend', (req, res) => {
+    const title = req.query.title;
+    console.log(`${title} 추천 요청이 들어왔어요!`);
 
-    // const pythonProcess = spawn(
-    //     "python",
-    //     [path.join(__dirname, "public",  "py", "recommend.py"), searchText]
-    // );
     const pythonProcess = spawn(
-        "C:\\ProgramData\\anaconda3\\python.exe",  // ← Anaconda의 Python 경로
-        [path.join(__dirname, "public", "py", "recommend.py"), searchText]
+    "C:\\ProgramData\\anaconda3\\python.exe",  // ← Python 경로
+    [path.join(__dirname, "public", "py", "recommend.py"), title]
     );
 
-    let dataBuffer = "";
-    let errorBuffer = "";
+    let dataBuffer = '';
+    let errorBuffer = '';
 
     pythonProcess.stdout.on('data', (chunk) => {
-        dataBuffer += chunk.toString('utf8');
+    dataBuffer += chunk.toString('utf8');
     });
 
     pythonProcess.stderr.on('data', (chunk) => {
-        errorBuffer += chunk.toString('utf8');
+    errorBuffer += chunk.toString('utf8');
     });
 
     pythonProcess.on('close', (code) => {
+    if (code !== 0) {
+        console.error(`Python 추천 프로세스 종료 코드: ${code}`);
+        console.error(`stderr: ${errorBuffer}`);
+        return res.status(500).json({ error: '추천 스크립트 실행 실패' });
+    }
+
+    try {
+        const output = JSON.parse(dataBuffer);
+        console.log("추천 결과:", output);
+        res.json({
+        input_title: output.input_title,
+        recommendations: output.recommendations
+        });
+    } catch (error) {
+        console.error('추천 JSON 파싱 오류:', error);
+        console.error('원본:', dataBuffer);
+        res.status(500).json({ error: '추천 결과 처리 중 오류 발생' });
+    }
+    });
+});
+
+// 상세 페이지 HTML 제공
+app.get('/movie/:id', (req, res, next) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'detail_page.html'));
+});
+
+// 영화 상세 데이터 API
+app.get('/api/movie/:id', (req, res, next) => {
+    const movieId = req.params.id;
+    const id = req.params.id;
+    if (id.endsWith('.html')) {
+    // 아마 정적 파일 요청일 가능성이 있으니 다음 미들웨어로 넘김
+    return next();
+}
+    console.log(`API 요청 받은 movieId: ${movieId}`);
+
+    const python = spawn('python', [path.join(__dirname, 'public', 'py', 'movie_detail.py'), movieId]);
+
+        let data = '';
+        let error = '';
+
+        python.stdout.on('data', chunk => {
+        data += chunk.toString();
+    });
+
+    python.stderr.on('data', chunk => {
+        error += chunk.toString();
+    });
+
+    python.on('close', code => {
         if (code !== 0) {
-            console.error(`Python 프로세스 오류 종료 코드: ${code}`);
-            console.error(`stderr: ${errorBuffer}`);
-            return res.status(500).json({ error: 'Python 스크립트 실행 실패' });
-        }
-        try {
-            const output = JSON.parse(dataBuffer);
-            console.log("Python에서 받은 추천 데이터:", output);
-            res.json({
-                input_title: output.input_title,
-                recommendations: output.recommendations
-            });
-        } catch (error) {
-            console.error('JSON 파싱 오류:', error);
-            console.error('수신 데이터:', dataBuffer);
-            res.status(500).json({ error: 'Python 결과 처리 중 오류 발생' });
-        }
+        console.error(`Python 프로세스 종료 코드: ${code}`);
+        console.error('stderr:', error);
+        return res.status(500).json({ error: 'Python 실행 실패' });
+    }
+
+    if (error) {
+        console.error('Python STDERR:', error);
+    }
+
+    try {
+        const movie = JSON.parse(data);
+        // console.log("영화 상세 데이터:", movie);
+        res.json(movie);
+    } catch (e) {
+        console.error('JSON 파싱 실패:', e);
+        console.error('원본 데이터:', data);
+        res.status(500).json({ error: '응답 처리 실패' });
+    }
     });
 });
 

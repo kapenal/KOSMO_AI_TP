@@ -1,32 +1,119 @@
-// search_list.html에서 상세페이지(임시) 버튼 클릭 시 일어나는 이벤트
-document.getElementById('detail_btn').addEventListener('click', async function() {
-    const searchText = document.getElementById("search_text").value;
+// // 영화 상세 페이지
+window.addEventListener('DOMContentLoaded', () => {
+  const parts = window.location.pathname.split('/');
+  const movieId = parts[parts.length - 1];
 
-    try {
-        // 서버로 POST 요청 보내기
-        const response = await fetch('/do-recommend', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ text: searchText })
-        });
+  fetch(`/api/movie/${movieId}`)
+    .then(res => res.json())
+    .then(movie => {
+      // 영화 정보 삽입
+      document.getElementById('title_ko').textContent = `${movie.제목}`;
+      // document.getElementById('title_en').textContent = movie.영문제목 || '';
+      document.getElementById('release_date').textContent = `${movie.연도}`;
+      // document.getElementById('runtime').textContent = `상영시간: ${movie.상영시간 || '-'}분`;
+      document.getElementById('rating_value').textContent = `${movie.평점}`;
+      // document.getElementById('director').textContent = movie.감독 || '-';
+      // document.getElementById('actors').textContent = (movie.출연진 || []).join(', ');
+      document.getElementById('overview').textContent = movie.줄거리 || '줄거리 정보가 없습니다.';
+      document.getElementById('genres').textContent = movie.장르.join(', ');
+      // // 장르 뱃지
+      // const genreContainer = document.getElementById('genre_badges');
+      // genreContainer.innerHTML = '';
+      // (movie.장르 || []).forEach(genre => {
+      //   const span = document.createElement('span'); 
+      //   span.className = 'badge bg-secondary me-1';
+      //   span.textContent = genre;
+      //   genreContainer.appendChild(span);
+      // });
 
-        const data = await response.json();
-        console.log("추천 데이터:", data);
-        // 서버 응답을 정상적으로 받았을 경우에만 페이지 이동
-        if (data && data.recommendations) {
-            // data 전체를 localStorage에 저장하거나,
-            // 필요한 데이터만 query string으로 넘길 수도 있음
-            console.log("추천 데이터:", data);
-            console.log("추천 데이터:", data.recommendations);
-            localStorage.setItem('recommendData', JSON.stringify(data));
-            
-            // 페이지 이동
-            window.location.href = '/html/detail_page.html';
-        } else {
-            console.error('추천 데이터 없음:', data);
-        }
-        // 에러 처리
-    } catch (error) {
-        console.error('서버 오류:', error);
-    }
+      // 포스터 이미지
+      if (movie.포스터) {
+        const posterImg = document.getElementById('poster');
+        posterImg.src = movie.포스터;
+        posterImg.classList.remove('d-none');
+        document.getElementById('poster_empty').classList.add('d-none');
+      }
+    })
+    .catch(err => {
+      console.error('영화 상세 불러오기 실패:', err);
+      document.getElementById('overview').textContent = '영화 정보를 불러올 수 없습니다.';
+    });
 });
+
+//     // 추천 영화 데이터 로드
+//     window.onload = function () {
+//       // 1. URL에서 title 추출
+//       const params = new URLSearchParams(window.location.search);
+//       const titleFromUrl = params.get('title') || '';
+//             const recommendData = titleFromUrl
+
+//             if (recommendData && recommendData.recommendations) {
+//                 console.log("추천 데이터:", recommendData);
+
+//                 // 검색어 input에 값 넣기
+//                 document.getElementById('search_text').value = recommendData.input_title || '';
+
+//                 // 추천 영화들 반복 렌더링
+//                 const container = document.getElementById('recommend_container');
+//                 container.innerHTML = ''; // 기존 내용 초기화
+
+//                 recommendData.recommendations.forEach((movie, index) => {
+//                     const movieDiv = document.createElement('div');
+//                     movieDiv.style.cssText = "width: 20%; padding: 10px; box-sizing: border-box;";
+
+//                     movieDiv.innerHTML = `
+//                         <img src="${movie.poster_path}" style="width: 200px%; height: 300px;" alt="${movie.title_ko}">
+//                         <p><strong>제목:</strong> ${movie.title_ko}</p>
+//                         <p><strong>장르:</strong> ${(movie.genres || []).join(', ')}</p>
+//                         <p><strong>개봉일:</strong> ${movie.release_date}</p>
+//                         <p><strong>평점:</strong> ${movie.vote_average.toFixed(1)}</p>
+//                     `;
+
+//                     container.appendChild(movieDiv);
+//                 });
+//             } else {
+//                     console.error("추천 데이터가 없습니다.");
+//             }
+//         };
+
+
+
+// 추천 영화 데이터 리스트
+window.onload = function () {
+  const params = new URLSearchParams(window.location.search);
+  const titleFromUrl = params.get('title') || '';
+  console.log("추천 영화 제목:", titleFromUrl);
+  if (titleFromUrl) {
+    fetch(`/api/recommend?title=${encodeURIComponent(titleFromUrl)}`)
+      .then(res => res.json())
+      .then(recommendData => {
+        console.log("추천 데이터:", recommendData);
+
+        // document.getElementById('search_text').value = recommendData.input_title || '';
+        const container = document.getElementById('recommend_list');
+
+        container.innerHTML = ''; // 기존 추천 영화 지우기
+
+      recommendData.recommendations.forEach((movie, index) => {
+        const movieDiv = document.createElement('div'); // ✅ 반복 안에서 새로 생성
+        movieDiv.className = 'recommend-item bg-secondary';
+        movieDiv.style.cssText = "width: 220px; height: 350px; text-align: center; padding: 10px; box-sizing: border-box;";
+
+        movieDiv.innerHTML = `
+            <a href="/movie/${movie.link}?title=${encodeURIComponent(movie.title_ko)}" style="text-decoration: none; color: inherit;">
+              <img src="${movie.poster_path}" style="width: 150px; height: 250px;" alt="${movie.title_ko}">
+              <p align="center"><strong>제목:</strong> ${movie.title_ko}</p>
+              <p align="center"><strong>장르:</strong> ${(movie.genres || []).slice(0, 2).join(', ')}</p>
+            </a>
+        `;
+
+        container.appendChild(movieDiv);
+      });
+      })
+      .catch(err => {
+        console.error("추천 영화 불러오기 실패:", err);
+      });
+  } else {
+    console.error("추천 데이터가 없습니다.");
+  }
+};
