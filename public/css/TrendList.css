@@ -1,3 +1,32 @@
+/* 헤더 */
+.navbar {
+  background-color: #000000 !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand i {
+  margin-right: 8px;
+  color: #ffd700;
+}
+.navbar a.btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+}
+.navbar a.btn:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+
+/* 본문 */
+
 body {
     background-image: url('../img/영화관.jpg');
     background-repeat: no-repeat;
@@ -7,14 +36,18 @@ body {
     margin: 0;                   /* body 기본 margin 제거 (필요 시) */
 }
 
+#top-space {
+  margin-top: 50px;
+}
+
 .header-title {
     border-radius: 10px;         /* 둥근 모서리 */
     font-size: 20px;             /* 글자 크기 */  
     max-width: 400px;            /* 박스 최대 너비 */
-    margin: 18px auto;           /* 가운데 정렬 */
+    margin: 15px auto;           /* 가운데 정렬 */
     text-align: center;
     font-weight: bold;
-    padding: 40px 0 40px;
+    padding: 30px 0 30px;
     background-color: rgba(248, 249, 250, 0.2);
     color: azure;    
 }
@@ -22,7 +55,7 @@ body {
 #bottom-space{
     display: flex;
     justify-content: center;  /* 가로 방향 가운데 정렬 */
-    margin-top: 100px;        /* 위쪽 여백 */
+    margin-top: 75px;        /* 위쪽 여백 */
 }
 
 .Trend-box {
@@ -31,4 +64,70 @@ body {
     border-radius: 10px;         /* 둥근 모서리 */
     background-color: rgba(248, 249, 250, 0.2);
     /* background: #13264E; */
+}
+
+#date-display {
+    color: grey;
+    margin-bottom: 30px;
+
+}
+
+.trend_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rank_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.rank_box > .rank {
+  font-style: italic;
+  font-weight: bold;
+  color: beige;
+  font-size: 27px;
+}
+
+.status {
+  font-size: 12px;
+  color: #ff4d4f;
+}
+
+.status.new {
+  color: #00b894;
+}
+
+.poster {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px; /* 선택사항: 모서리 둥글게 */
+}
+
+.info {
+  padding-left: 10px;
+}
+
+.info .title {
+  font-weight: 600;
+  font-size: 20px;
+  color: black;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.info .genre {
+  font-size: 14px;
+  color: #888;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
