@@ -5,37 +5,24 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
-
+import requests
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
-options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
+# User-Agent 설정 (브라우저처럼 위장)
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0 Safari/537.36'
+}
 
 # 인자 확인
 movie_id = sys.argv[1]
 url = f'https://m.kinolights.com/title/{movie_id}'
 
-# [1. 페이지 요청]
-driver = webdriver.Chrome(options=options)
-driver.get(url)
-time.sleep(3)  # JS 로딩 대기
+# URL로 GET 요청 보내기
+response = requests.get(url, headers=headers)
 
-# [2. html 파싱]
-html = driver.page_source
-
-# 여기 바로 추가
-# print("=== 페이지 HTML 일부 ===")
-# print(html[:1000])  # HTML 앞부분 출력해보기
-# print("=====================")
-
-soup = BeautifulSoup(html, 'html.parser')
+soup = BeautifulSoup(response.text, 'html.parser')
 
 # [3. 정보 가져오기]
 # 제목
@@ -74,8 +61,6 @@ overview = overview_tag.get_text(strip=True) if overview_tag else ""
 
 if overview.endswith("더보기"):
     overview = overview[:-3]
-
-driver.quit()
 
 # 결과를 딕셔너리로 정리
 movie_info = {
