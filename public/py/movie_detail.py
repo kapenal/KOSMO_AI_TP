@@ -54,9 +54,9 @@ year_tag = soup.select_one('#contents > div.info.tab-item > section:nth-child(1)
 year = year_tag.get_text(strip=True) if year_tag else ""
 
 # 평점
-rating_tag = soup.select_one('.score')  # 실제 클래스명 확인 필요
+rating_tag = soup.select_one('.movie-star-wrap > .score') # 실제 클래스명 확인 필요
 rating = rating_tag.get_text(strip=True) if rating_tag else ""
-
+rating = rating + "점"
 # 이미지
 img_tag = soup.select_one('.poster img')  # 더 유연한 셀렉터
 if img_tag and img_tag.has_attr('src'):

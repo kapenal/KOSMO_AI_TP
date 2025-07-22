@@ -35,6 +35,7 @@ body {
   border-radius: 10px;
   margin: 0;
   box-sizing: border-box;
+  backdrop-filter: blur(4px);
 }
 
 /* 줄거리 박스 배경 */

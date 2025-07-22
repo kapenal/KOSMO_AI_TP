@@ -133,6 +133,17 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 
+.movie-card,
+.btn {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.movie-card:hover,
+.btn:hover {
+  transform: scale(1.05);
+}
+
 /* 14. 회색 설명 글자 */
 .text-muted {
   color: #b0b0b0 !important;
