@@ -54,16 +54,58 @@ def find_similar_movie(input_title, title_tokens, threshold=0.1):
 
 # 입력한 제목과 유사한 영화 1개를 찾은 후,
 # 그 영화의 벡터(장르+줄거리)를 기준으로 가장 유사한 영화 top_n개를 추천
+# 애니메이션 유사도 0.7로 조정
+# def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
+    
+#     matched_idx = find_similar_movie(input_title, title_tokens)
+
+#     # 유사한 제목을 찾지 못했을 경우: 모든 영화 벡터의 평균을 사용
+#     if matched_idx == -1:
+#         # print(f"'{input_title}'과(와) 비슷한 영화를 찾지 못했습니다. 전체 평균 벡터로 추천합니다.")
+#         input_vec = np.mean(movie_vectors, axis=0)
+#     else:
+#         # print(f"입력하신 '{input_title}'과(와) 가장 비슷한 영화는 '{movies[matched_idx]['title_ko']}'입니다.")
+#         input_vec = movie_vectors[matched_idx]
+
+#     # --- 코사인 유사도 계산 ---
+#     input_norm = np.linalg.norm(input_vec)
+#     vectors_norm = np.linalg.norm(movie_vectors, axis=1)
+#     dot_products = movie_vectors @ input_vec  # 내적
+
+#     with np.errstate(divide='ignore', invalid='ignore'):
+#         cosine_similarities = dot_products / (vectors_norm * input_norm)  # 유사도 계산
+#         cosine_similarities = np.nan_to_num(cosine_similarities)  # NaN 방지
+
+#     # 자기 자신은 제외 (중복 추천 방지)
+#     if matched_idx >= 0:
+#         cosine_similarities[matched_idx] = -1
+
+#     # 상위 top_n 유사한 영화 인덱스 선택
+#     top_indices = np.argpartition(-cosine_similarities, top_n)[:top_n]
+#     top_indices = top_indices[np.argsort(-cosine_similarities[top_indices])]  # 유사도 내림차순 정렬
+
+#     # 추천 영화 정보 구성
+#     recommendations = []
+#     for i in top_indices:
+#         m = movies[i]
+#         recommendations.append({
+#             "title_ko": m.get('title_ko', ''),
+#             "release_date": m.get('release_date', ''),
+#             "vote_average": m.get('vote_average', 0),
+#             "poster_path": m.get('poster_path', ''),
+#             "similarity": cosine_similarities[i]
+#         })
+
+#     return recommendations
+
 def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
     
     matched_idx = find_similar_movie(input_title, title_tokens)
 
     # 유사한 제목을 찾지 못했을 경우: 모든 영화 벡터의 평균을 사용
     if matched_idx == -1:
-        # print(f"'{input_title}'과(와) 비슷한 영화를 찾지 못했습니다. 전체 평균 벡터로 추천합니다.")
         input_vec = np.mean(movie_vectors, axis=0)
     else:
-        # print(f"입력하신 '{input_title}'과(와) 가장 비슷한 영화는 '{movies[matched_idx]['title_ko']}'입니다.")
         input_vec = movie_vectors[matched_idx]
 
     # --- 코사인 유사도 계산 ---
@@ -79,9 +121,17 @@ def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
     if matched_idx >= 0:
         cosine_similarities[matched_idx] = -1
 
+    # --- 애니메이션 유사도 조정 ---
+    # 애니메이션 장르의 유사도 점수를 낮춰서 추천 순위에서 뒤로 밀기
+    adjusted_similarities = cosine_similarities.copy()  # 원본 유지
+    for idx, m in enumerate(movies):
+        genres = m.get("genres", [])
+        if "애니메이션" in genres:
+            adjusted_similarities[idx] *= 0.7  # ← 패널티 부여 (비율은 필요시 조정 가능)
+
     # 상위 top_n 유사한 영화 인덱스 선택
-    top_indices = np.argpartition(-cosine_similarities, top_n)[:top_n]
-    top_indices = top_indices[np.argsort(-cosine_similarities[top_indices])]  # 유사도 내림차순 정렬
+    top_indices = np.argpartition(-adjusted_similarities, top_n)[:top_n]
+    top_indices = top_indices[np.argsort(-adjusted_similarities[top_indices])]  # 유사도 내림차순 정렬
 
     # 추천 영화 정보 구성
     recommendations = []
@@ -92,7 +142,7 @@ def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
             "release_date": m.get('release_date', ''),
             "vote_average": m.get('vote_average', 0),
             "poster_path": m.get('poster_path', ''),
-            "similarity": cosine_similarities[i]
+            "similarity": adjusted_similarities[i]  # 조정된 유사도
         })
 
     return recommendations
@@ -104,7 +154,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # 예시: 사용자 입력 영화 제목
-    input_title = sys.argv[1]  # ← 원하는 제목으로 변경 가능
+    input_title = input_title = " ".join(sys.argv[1:])  # ← 원하는 제목으로 변경 가능
 
     # 추천 실행
     recs = recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5)
