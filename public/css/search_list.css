@@ -2,6 +2,11 @@
 /* 기본 바디 스타일: 글꼴, 색상, 줄 간격, 여백 제거, 박스 사이징 통일 */
 body {
   font-family: 'Lato', sans-serif;
+  background-image: url('../img/index_영화관.jpg');  /* ✅ 영화관 이미지로 설정 */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;  /* ✅ 배경 고정 */
   color: #e0e0e0;
   line-height: 1.5;
   margin: 0;
@@ -35,7 +40,6 @@ body {
 /* 검색 영역 전체 패딩과 배경색, 텍스트 중앙 정렬 */
 .search-section {
   padding: 80px 0 100px;
-  background-color: #1e1c1c;  /* 어두운 단색 배경 */
   text-align: center;
 }
 

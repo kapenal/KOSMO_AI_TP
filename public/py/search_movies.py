@@ -1,105 +1,159 @@
+import requests
+from bs4 import BeautifulSoup
+import json
 import sys
 import io
-import json
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
-from bs4 import BeautifulSoup
-import time
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# 현재상영영화 페이지를 크롤링하는 함수 정의
-def crawl_movies_fixed_scroll(max_pages=8, scroll_position=800, max_results=6):
-    options = Options()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('window-size=1920x1080')
-    options.add_argument('--disable-blink-features=AutomationControlled')
-    options.add_argument("user-agent=Mozilla/5.0")
-
-    driver = webdriver.Chrome(options=options)
+def crawl_movies_requests(max_results=6):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+                      "(KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+    }
     url = "https://search.naver.com/search.naver?query=현재상영영화"
-    driver.get(url)
-    time.sleep(2)
+    resp = requests.get(url, headers=headers)
+    if resp.status_code != 200:
+        return []
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    # 네이버 '현재상영영화' 결과 내에서 영화 데이터 div.data_area (원본 셀렉터 참고)
+    movies = soup.select("div.data_area")[:max_results]
 
     results = []
-    page = 1
-    # keyword = keyword.lower()  # 원본 : 키워드 소문자 변환 (필터용)
-    # 변경 : keyword 필터를 제거하여 모든 현재 상영작을 가져오기 위해 주석 처리
+    for movie in movies:
+        title_tag = movie.select_one("div.title a.this_text")
+        title = title_tag.text.strip() if title_tag else ""
 
-    while page <= max_pages:
-        driver.execute_script(f"window.scrollTo(0, {scroll_position});")
-        time.sleep(1)
+        img_tag = movie.select_one("a.img_box img")
+        poster = img_tag["src"] if img_tag and img_tag.has_attr("src") else "이미지 없음"
 
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        movies = soup.select("div.data_area")
+        overview_tag = movie.select_one("dl.info_group dd")
+        overview = overview_tag.text.strip() if overview_tag else "개요 없음"
 
-        for movie in movies:
-            title_tag = movie.select_one("div.title a.this_text")
-            title = title_tag.text.strip() if title_tag else ""
+        rating_tag = movie.select_one("dl.info_group.type_visible dd span.num")
+        rating = rating_tag.text.strip() if rating_tag else "별점 없음"
 
-            img_tag = movie.select_one("a.img_box img")
-            poster = img_tag["src"] if img_tag and img_tag.has_attr("src") else "이미지 없음"
+        results.append({
+            "제목": title,
+            "별점": rating,
+            "개요": overview,
+            "포스터": poster
+        })
 
-            overview_tag = movie.select_one("dl.info_group dd")
-            overview = overview_tag.text.strip() if overview_tag else "개요 없음"
-
-            rating_tag = movie.select_one("dl.info_group.type_visible dd span.num")
-            rating = rating_tag.text.strip() if rating_tag else "별점 없음"
-
-            # 원본 코드 : 키워드 포함 여부 검사하여 필터링
-            # title_lower = title.lower()
-            # overview_lower = overview.lower()
-            # overview_parts = [part.strip() for part in overview_lower.split('/')]
-            # if keyword in title_lower or any(keyword in part for part in overview_parts):
-            #     results.append({...})
-            #     if len(results) >= max_results:
-            #         driver.quit()
-            #         return results
-
-            # 변경 : 필터 제거, 그냥 모든 영화 추가
-            results.append({
-                "제목": title,
-                "별점": rating,
-                "개요": overview,
-                "포스터": poster
-            })
-            if len(results) >= max_results:
-                driver.quit()
-                return results
-
-        try:
-            next_btn = driver.find_element(By.CSS_SELECTOR, "a.pg_next")
-            if next_btn.get_attribute("aria-disabled") == "true":
-                break
-            next_btn.click()
-            page += 1
-            time.sleep(2)
-        except NoSuchElementException:
-            break
-
-    driver.quit()
     return results
 
-
 if __name__ == "__main__":
-    # 원본 : 입력 인자 받음
-    # if len(sys.argv) < 2:
-    #     print(json.dumps({"error": "검색어 인자가 없습니다."}, ensure_ascii=False))
-    #     sys.exit(1)
-
-    # input_title = sys.argv[1]
-    # keyword = input_title.strip().lower()
-
-    # 변경 : 입력 키워드 무시, 그냥 현재 상영작 전체를 가져오기 때문에
-    # 아래처럼 바로 함수 호출
-    data = crawl_movies_fixed_scroll()
-
+    data = crawl_movies_requests()
     if data:
         print(json.dumps(data, ensure_ascii=False, indent=2))
     else:
         print(json.dumps({"message": "❌ 현재 상영작을 가져올 수 없습니다."}, ensure_ascii=False))
+
+# 2025_07_22 수정 전
+# import sys
+# import io
+# import json
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.common.exceptions import NoSuchElementException
+# from bs4 import BeautifulSoup
+# import time
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# # 현재상영영화 페이지를 크롤링하는 함수 정의
+# def crawl_movies_fixed_scroll(max_pages=8, scroll_position=800, max_results=6):
+#     options = Options()
+#     options.add_argument('--headless')
+#     options.add_argument('--disable-gpu')
+#     options.add_argument('window-size=1920x1080')
+#     options.add_argument('--disable-blink-features=AutomationControlled')
+#     options.add_argument("user-agent=Mozilla/5.0")
+
+#     driver = webdriver.Chrome(options=options)
+#     url = "https://search.naver.com/search.naver?query=현재상영영화"
+#     driver.get(url)
+#     time.sleep(2)
+
+#     results = []
+#     page = 1
+#     # keyword = keyword.lower()  # 원본 : 키워드 소문자 변환 (필터용)
+#     # 변경 : keyword 필터를 제거하여 모든 현재 상영작을 가져오기 위해 주석 처리
+
+#     while page <= max_pages:
+#         driver.execute_script(f"window.scrollTo(0, {scroll_position});")
+#         time.sleep(1)
+
+#         soup = BeautifulSoup(driver.page_source, "html.parser")
+#         movies = soup.select("div.data_area")
+
+#         for movie in movies:
+#             title_tag = movie.select_one("div.title a.this_text")
+#             title = title_tag.text.strip() if title_tag else ""
+
+#             img_tag = movie.select_one("a.img_box img")
+#             poster = img_tag["src"] if img_tag and img_tag.has_attr("src") else "이미지 없음"
+
+#             overview_tag = movie.select_one("dl.info_group dd")
+#             overview = overview_tag.text.strip() if overview_tag else "개요 없음"
+
+#             rating_tag = movie.select_one("dl.info_group.type_visible dd span.num")
+#             rating = rating_tag.text.strip() if rating_tag else "별점 없음"
+
+#             # 원본 코드 : 키워드 포함 여부 검사하여 필터링
+#             # title_lower = title.lower()
+#             # overview_lower = overview.lower()
+#             # overview_parts = [part.strip() for part in overview_lower.split('/')]
+#             # if keyword in title_lower or any(keyword in part for part in overview_parts):
+#             #     results.append({...})
+#             #     if len(results) >= max_results:
+#             #         driver.quit()
+#             #         return results
+
+#             # 변경 : 필터 제거, 그냥 모든 영화 추가
+#             results.append({
+#                 "제목": title,
+#                 "별점": rating,
+#                 "개요": overview,
+#                 "포스터": poster
+#             })
+#             if len(results) >= max_results:
+#                 driver.quit()
+#                 return results
+
+#         try:
+#             next_btn = driver.find_element(By.CSS_SELECTOR, "a.pg_next")
+#             if next_btn.get_attribute("aria-disabled") == "true":
+#                 break
+#             next_btn.click()
+#             page += 1
+#             time.sleep(2)
+#         except NoSuchElementException:
+#             break
+
+#     driver.quit()
+#     return results
+
+
+# if __name__ == "__main__":
+#     # 원본 : 입력 인자 받음
+#     # if len(sys.argv) < 2:
+#     #     print(json.dumps({"error": "검색어 인자가 없습니다."}, ensure_ascii=False))
+#     #     sys.exit(1)
+
+#     # input_title = sys.argv[1]
+#     # keyword = input_title.strip().lower()
+
+#     # 변경 : 입력 키워드 무시, 그냥 현재 상영작 전체를 가져오기 때문에
+#     # 아래처럼 바로 함수 호출
+#     data = crawl_movies_fixed_scroll()
+
+#     if data:
+#         print(json.dumps(data, ensure_ascii=False, indent=2))
+#     else:
+#         print(json.dumps({"message": "❌ 현재 상영작을 가져올 수 없습니다."}, ensure_ascii=False))
 
 
 
