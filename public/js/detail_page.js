@@ -46,9 +46,9 @@ function loadReviews(movieId) {
         const div = document.createElement('div');
         div.className = 'review-item';
         div.innerHTML = `
-          <p><strong>${review.닉네임}</strong></p>
-          <p>${review.리뷰}</p>
-          <p>평점: ${review.평점}</p>
+          <p class="review-nickname"><strong>${review.닉네임}</strong></p>
+          <p class="review-text">${review.리뷰}</p>
+          <p class="review-score">평점: ${review.평점}</p>
         `;
         reviewContainer.appendChild(div);
       });
@@ -76,8 +76,8 @@ function loadRecommendations(title) {
           onerror="this.onerror=null; this.src='/img/unimg.jpg';"
           style="width: 150px; height: 250px;" 
           alt="${movie.title_ko}">
-          <p><strong>제목:</strong> ${movie.title_ko}</p>
-          <p><strong>장르:</strong> ${(movie.genres || []).slice(0, 2).join(', ')}</p>
+          <p><strong></strong> ${movie.title_ko}</p>
+          <p><strong></strong> ${(movie.genres || []).slice(0, 2).join(', ')}</p>
         `;
 
         // 클릭 시 기존 검색 함수 실행
