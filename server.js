@@ -5,6 +5,7 @@ const port = 3000;
 const { spawn } = require('child_process');
 const path = require("path");
 const { urlencoded } = require('body-parser');
+const { exec } = require("child_process"); // 맨 위에 이미 있지 않다면 추가
 
 // 추가한 바디 파싱
 app.use(express.urlencoded({ extended: true }));
@@ -228,10 +229,30 @@ app.get('/api/review/:id', (req, res) => {
 // 미주꺼--------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 
-// TrendList.html 보여주기
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'html', 'TrendList.html'));
-// });
+// 리뷰 감정 분석 요청
+app.post('/api/predict', (req, res) => {
+    const userReview = req.body.review;
+    console.log("감정 분석 요청:", userReview);
+
+    const pythonScriptPath = path.join(__dirname, 'public', 'py', 'RecommendMovie.py');
+
+    exec(`python "${pythonScriptPath}" "${userReview}"`, (error, stdout, stderr) => {
+        if (error) {
+            console.error("감정 분석 실행 오류:", error);
+            return res.status(500).json({ error: '감정 분석 실패' });
+        }
+        
+        try {
+            const result = JSON.parse(stdout);
+            res.json(result);
+        } catch (parseError) {
+            console.error("감정 분석 결과 파싱 오류:", parseError);
+            console.error("stdout:", stdout);
+            res.status(500).json({ error: '결과 파싱 실패' });
+        }
+    });
+});
+
 //-------------------------------------------------------
 
 
