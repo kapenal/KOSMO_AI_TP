@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadRecommendations(title);  // 추천 영화
   loadMovieDetail(movieId);   // 영화 상세 정보
   loadReviews(movieId);       // 리뷰 출력
+  loadReviewWordBubbleChart(movieId); // 리뷰 단어 버블 차트`
 });
 
 // 영화 상세 데이터 함수
@@ -65,6 +66,7 @@ function loadRecommendations(title) {
     .then(recommendData => {
       const container = document.getElementById('recommend_list');
       container.innerHTML = '';
+      const spinner = document.getElementById('loading-spinner');
 
       recommendData.recommendations.forEach(movie => {
         const movieDiv = document.createElement('div');
@@ -90,5 +92,86 @@ function loadRecommendations(title) {
     })
     .catch(err => {
       console.error("추천 영화 불러오기 실패:", err);
+    });
+}
+
+// 리뷰 단어 버블 차트 함수
+function loadReviewWordBubbleChart(movieId) {
+  const spinner = document.getElementById('loading-spinner');
+  
+  // 로딩 스피너 표시
+  spinner.style.display = 'block';
+  
+  fetch(`/api/wordbubble/${movieId}`)  // 단어 빈도 API 경로에 맞게 변경하세요
+    .then(res => res.json())
+    .then(data => {
+      spinner.style.display = 'none';
+
+      // data가 배열인지, 그리고 비어있지 않은지 확인
+      if (!Array.isArray(data) || data.length === 0) {
+        console.warn('데이터가 없거나 올바른 배열 형식이 아닙니다.');
+        return;  // 데이터가 없으면 차트 그리지 않음
+      }
+
+      console.log('버블 차트 데이터:', data);  // 디버깅용 로그
+
+      const svg = d3.select('#word-bubble-chart');
+      svg.selectAll('*').remove(); // 기존 차트 지우기
+
+      const width = +svg.attr('width');
+      const height = +svg.attr('height');
+
+      // 파스텔 톤 색상 정의 (파스텔 색상 배열)
+      const pastelColors = [
+        "#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", 
+        "#FFB6C1", "#FFCCCB", "#E0BBE4", "#D4F1F4", "#FFABAB"
+      ];
+      const color = d3.scaleOrdinal(pastelColors);
+
+      // 크기 스케일 설정
+      const sizeScale = d3.scaleSqrt()
+        .domain([d3.min(data, d => d.value), d3.max(data, d => d.value)])
+        .range([20, 80]);
+
+      const root = d3.pack()
+        .size([width, height])
+        .padding(5)(d3.hierarchy({ children: data }).sum(d => d.value));
+
+      const node = svg.selectAll('g')
+        .data(root.leaves())
+        .enter()
+        .append('g')
+        .attr('transform', d => `translate(${d.x},${d.y})`);
+
+      // 원 추가
+      const circles = node.append('circle')
+        .attr('r', d => d.r)
+        .attr('fill', (d, i) => color(i))
+        .on('mouseover', function (event, d) {
+          // 호버 시 원과 텍스트 크기 모두 증가
+          d3.select(this).transition().duration(300).attr('r', d.r * 1.5);  // 원 크기 증가
+          d3.select(this.nextElementSibling)  // 텍스트 크기 증가
+            .transition().duration(300)
+            .style('font-size', `${Math.min(2 * (d.r * 1.5) / d.data.text.length, 25)}px`);
+        })
+        .on('mouseout', function (event, d) {
+          // 호버 해제 시 원과 텍스트 크기 원래대로 복구
+          d3.select(this).transition().duration(300).attr('r', d.r);  // 원 크기 복구
+          d3.select(this.nextElementSibling)  // 텍스트 크기 복구
+            .transition().duration(300)
+            .style('font-size', `${Math.min(2 * d.r / d.data.text.length, 20)}px`);
+        });
+
+      // 텍스트 추가 (글자 크기도 호버 시 커짐)
+      node.append('text')
+        .attr('class', 'bubble-text')
+        .text(d => d.data.text)
+        .style('font-size', d => Math.min(2 * d.r / d.data.text.length, 25) + 'px')
+        .attr('dy', '.3em')
+        .attr('text-anchor', 'middle')
+        .style('pointer-events', 'none');  // 텍스트에 마우스 이벤트를 전달하지 않음
+    })
+    .catch(err => {
+      console.error('단어 버블 차트 데이터 로드 실패:', err);
     });
 }

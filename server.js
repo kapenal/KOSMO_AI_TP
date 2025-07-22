@@ -225,6 +225,58 @@ app.get('/api/review/:id', (req, res) => {
     });
 });
 
+app.get('/api/wordbubble/:id', (req, res) => {
+    const movieId = req.params.id;
+    console.log(`리뷰 단어 빈도 요청 받은 movieId: ${movieId}`);
+
+    const python = spawn('python', [path.join(__dirname, 'public', 'py', 'chart.py'), movieId]);
+
+    let data = '';
+    let error = '';
+
+    python.stdout.on('data', chunk => {
+        const chunkStr = chunk.toString();
+        console.log("Python stdout:", chunkStr); // 전체 출력 로그 확인
+        data += chunkStr;
+    });
+
+    python.stderr.on('data', chunk => {
+        const errStr = chunk.toString();
+        console.error("Python stderr:", errStr);
+        error += errStr;
+    });
+
+    python.on('close', code => {
+        if (code !== 0) {
+        console.error(`Python 프로세스 종료 코드: ${code}`);
+        return res.status(500).json({ error: 'Python 실행 실패', details: error });
+    }
+
+        try {
+            // JSON 배열만 추출
+            const jsonMatch = data.match(/\[[\s\S]*?\]/);  // 첫 번째 대괄호 배열 추출 (개행 포함 허용)
+            if (!jsonMatch) {
+                throw new Error('JSON 배열을 찾을 수 없음');
+            }
+
+            const words = JSON.parse(jsonMatch[0]);
+
+            if (!Array.isArray(words) || words.length === 0) {
+                console.error('데이터가 배열이 아니거나 비어있습니다:', words);
+                return res.status(500).json({ error: '올바른 배열 형식이 아닙니다.' });
+            }
+
+            console.log("Parsed words:", words);
+            res.json(words);
+            } catch (e) {
+            console.error('JSON 파싱 실패:', e);
+            console.error('원본 데이터:', data);
+            res.status(500).json({ error: '응답 처리 실패', details: e.message });
+        }
+    });
+});
+
+
 // 미주꺼--------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 
