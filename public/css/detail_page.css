@@ -32,7 +32,7 @@ body {
   background-color: rgba(255, 255, 255, 0.3);
   color: #ffffff;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   margin: 0;
   box-sizing: border-box;
   backdrop-filter: blur(4px);
@@ -56,7 +56,7 @@ body {
   width: 300px;
   height: 450px;
   background-color: #2a2a2a;
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,7 +67,7 @@ body {
   width: 300px;
   height: 450px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .poster-placeholder span {
@@ -109,27 +109,6 @@ body {
   width: 300px !important;
 }
 
-/* 감정 분포 범례 */
-.emotion-box .legend {
-  margin-top: 0;
-  color: #bbb;
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.emotion-box .legend > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.emotion-box .legend .badge {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-}
-
 /* 두 번째 줄 리뷰 박스 */
 .row.g-4 > div {
   display: flex;
@@ -163,6 +142,19 @@ body {
   min-height: 0; /* ★ 스크롤 가능하도록 설정 */
 }
 
+.review-nickname {
+  color: #ffffff;
+}
+
+.review-text {
+  color: #ffffff;
+}
+
+.review-score {
+  color: #ffd700;
+}
+
+
 /* 버튼 스타일 */
 .btn-gray {
   background-color: #ff0000 !important;
@@ -179,16 +171,58 @@ body {
   gap: 20px;
 }
 .recommend-item {
-  width: 160px;
-  height: 240px;
-  border-radius: 8px;
-  background-color: #444;
+  width: 220px; /* 고정 너비 */
+  /* height 제거해서 높이 자동 조절 */
+  padding: 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff;
+  overflow: hidden; /* 이미지 둥글게 자르기용 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* 요소 간 간격 */
+  transition: transform 0.2s;
+}
+
+.recommend-item:hover {
+  transform: scale(1.05);
+}
+
+.recommend-item img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: #000;
+  display: block;
+}
+
+.recommend-item p {
+  margin: 0;
+  text-align: center;
+  word-break: break-word; /* 긴 단어도 줄바꿈 */
+  white-space: normal; /* 기본 줄바꿈 허용 */
+  overflow-wrap: break-word; /* 단어가 너무 길 때 줄바꿈 */
+}
+
+/* 영화 제목, 장르 같은 텍스트에 별도 스타일을 주고 싶으면 추가 */
+.recommend-item p:first-of-type {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.recommend-item p:last-of-type {
+  font-size: 0.875rem;
+  opacity: 0.8;
 }
 
 /* 리뷰 아이템 */
 .review-item {
   background-color: rgba(255, 255, 255, 0.3);
-  border: 1px solid #444;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   color: #ddd;
   padding: 12px;
   border-radius: 8px;

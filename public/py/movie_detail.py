@@ -53,6 +53,9 @@ else:
 year_tag = soup.select_one('#contents > div.info.tab-item > section:nth-child(1) > ul > li:nth-child(4) > span.item__body')
 year = year_tag.get_text(strip=True) if year_tag else ""
 
+if year.endswith("개봉"):
+    year = year[:-2]
+
 # 평점
 rating_tag = soup.select_one('.movie-star-wrap > .score') # 실제 클래스명 확인 필요
 rating = rating_tag.get_text(strip=True) if rating_tag else ""
@@ -63,10 +66,6 @@ if img_tag and img_tag.has_attr('src'):
     img = img_tag['src']
 else:
     img = None
-
-# 감독
-staff_tag = soup.select_one('.staffList_0')
-staff = title_tag.get_text(strip=True) if title_tag else ""
 
 # 줄거리
 overview_tag = soup.select_one('.synopsis__text-wrap')
@@ -79,12 +78,11 @@ driver.quit()
 
 # 결과를 딕셔너리로 정리
 movie_info = {
-    "제목": title or "정보 없음",
-    "장르": genres,
-    "연도": year or "정보 없음",
-    "평점": rating or "정보 없음",
+    "제목" : title or "정보 없음",
+    "장르" : genres,
+    "연도" : year or "정보 없음",
+    "평점" : rating or "정보 없음",
     "포스터": img or "정보 없음",
-    "감독" : staff or "정보 없음",
     "줄거리" : overview or "정보 없음"
 }
 

@@ -1,8 +1,29 @@
-/* 네비게이션 바 */
+/* 1. CSS 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. 기본 글꼴 및 배경 설정 */
+body {
+  font-family: 'Lato', sans-serif;
+  background-image: url('../img/index_영화관.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* 3. 내비게이션 바 스타일 */
 .navbar {
   background-color: #000000 !important;
   border-bottom: 2px solid #ffffff !important;
 }
+
+/* 4. 로고 텍스트 및 아이콘 스타일 */
 .navbar-brand {
   color: #ffffff !important;
   font-weight: bold;
@@ -14,129 +35,105 @@
   margin-right: 8px;
   color: #ffd700;
 }
-.navbar a.btn {
-  background-color: #333;
-  color: #fff;
-  border: none;
-}
-.navbar a.btn:hover {
-  background-color: #555;
-  color: #fff;
-}
 
-/* 본문 */
-body {
-    background-image: url('../img/영화관.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;      /* 화면 전체에 꽉 차게 */
-    background-position: center; /* 중앙 위치 */
-    background-attachment: fixed; /* 스크롤 시 고정 */
-    margin: 0;                   /* body 기본 margin 제거 (필요 시) */
-}
-
-#top-space {
-  margin-top: 50px;
-}
-
-.header-title {
-    border-radius: 10px;         /* 둥근 모서리 */
-    font-size: 20px;             /* 글자 크기 */  
-    max-width: 400px;            /* 박스 최대 너비 */
-    margin: 15px auto;           /* 가운데 정렬 */
-    text-align: center;
-    font-weight: bold;
-    padding: 30px 0 30px;
-    background-color: rgba(248, 249, 250, 0.2);
-    color: azure;    
-}
-
-/* 카드 */
-#ott-card {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
+/* 5. 카드 박스 */
 .card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 32px;
+  backdrop-filter: blur(3px);
 }
 
+/* 6. 카드 제목 */
 .card-title {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 12px;
-  color: #333;
+  margin-bottom: 36px;
+  color: #fff;
 }
 
+/* ✅ 영화 목록 그리드 설정 */
+.card-body {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px 20px;
+  justify-items: center;
+  padding-top: 10px;
+}
+
+/* ✅ ul 자체 제거 */
 .card-body ul {
-  list-style: none;
-  padding: 0;
+  display: contents;
+  padding-left: 0;
   margin: 0;
 }
 
+/* ✅ 영화 카드 스타일 */
 .movie-item {
-  display: flex;
-  align-items: center; /* 여기서 flex-start -> center로 변경 */
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;  
-  margin-bottom: 10px;
-  margin-left: 10px;
-}
-
-/* 마지막 항목 구분선 제거 */
-.movie-item:last-child {
-  border-bottom: none;       
-  margin-bottom: 0;
-}
-
-.rank {
-  font-weight: bold;
-  font-size: 1rem;
-  width: 24px;
-  height: 90px; /* 포스터 높이에 맞춤 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  margin-right: 12px;
-}
-
-.movie-item img {
-  width: 60px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
-  margin-right: 12px;
-}
-
-.text {
+  position: relative;  /* 순위 위치 기준 */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  font-size: 0.9rem;
-  height: 90px; /* 포스터 높이와 맞춰서 텍스트 수직중앙정렬 */
+  align-items: center;
+  width: 160px;
+  padding: 10px;
+  border-radius: 12px;
+  color: white;
 }
 
-.text .title {
-  font-weight: 600;
+/* ✅ 순위 원형 표시 */
+.rank {
+  position: absolute;
+  top: -30px;               /* 포스터 위쪽 밖으로 20px 띄움 */
+  left: 50%;               /* 가로 중앙 */
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(0,0,0,0.8);
+  z-index: 10;
+  background: none;        /* 배경 없음 */
+  pointer-events: none;
+}
+
+
+/* ✅ 포스터 이미지 */
+.movie-item img {
+  width: 160px;   /* 고정 너비 */
+  height: 240px;  /* 고정 높이 */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.movie-item img:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ 텍스트 영역 */
+.text {
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* ✅ 제목 스타일 */
+.title {
+  font-size: 1rem;
+  font-weight: 700;
   margin-bottom: 4px;
-  color: #111;
+  color: #ffffff;
+
+  display: -webkit-box;       /* flexbox 대신 이 속성으로 */
+  -webkit-line-clamp: 2;      /* 최대 2줄 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;     /* 긴 단어도 줄바꿈 */
 }
 
-.text .type_ {
-  color: #777;
-  font-size: 0.85rem;
+/* ✅ 장르 스타일 */
+.type_ {
+  font-size: 0.75rem;
+  color: #bbbbbb;
 }
