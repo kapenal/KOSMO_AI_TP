@@ -60,11 +60,17 @@ document.addEventListener("DOMContentLoaded", () => {
             li.appendChild(posterImg);
             li.appendChild(tityDiv);
             ul.appendChild(li);
+
+            // 클릭 시 기존 검색 함수 실행
+          li.addEventListener('click', () => {
+            executeSearch(movie["제목"]);
+          });
         });
         cardBody.appendChild(ul);
 
         card.appendChild(cardTitle);
         card.appendChild(cardBody);
+        
 
         container.appendChild(card);
       });
