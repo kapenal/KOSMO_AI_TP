@@ -52,6 +52,15 @@ body {
 
 /* 6. 본문 스타일 */
 
+/* 페이지 날짜, 리로드 버튼 */
+#date-display-btn {
+  margin-bottom: 20px;
+}
+
+#date-display-btn:hover {
+  background-color: #ffd700;
+}
+
 /* 상단 여백 확보 */
 #top-space {
   margin-top: 50px;
