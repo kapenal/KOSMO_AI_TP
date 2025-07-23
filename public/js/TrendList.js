@@ -1,10 +1,25 @@
 window.addEventListener('DOMContentLoaded', async () => {
-    // 오늘 날짜 표시
+    // 날짜 표시 및 리로드
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    const formattedDate = `${mm}.${dd} 기준 ↺`;
-    document.getElementById('date-display').textContent = formattedDate;
+    const formattedDate = `${mm}.${dd} 기준`;
+
+    document.getElementById('date-text').textContent = formattedDate;
+
+    const reloadBtn = document.getElementById('date-display-btn');
+    const reloadIcon = document.getElementById('reload-icon');
+
+    reloadBtn.addEventListener('click', () => {
+        // 아이콘을 스피너로 변경
+        reloadIcon.classList.remove('bi-arrow-clockwise');
+        reloadIcon.classList.add('spinner-border', 'spinner-border-sm');
+
+        // 1초 후 페이지 새로고침
+        setTimeout(() => {s
+            location.reload();
+        }, 1000);
+    });
 
     // trend-list 데이터 불러오기
     const container = document.getElementById('trend-list');
