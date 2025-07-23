@@ -8,7 +8,7 @@
 /* 2. 기본 글꼴 및 배경 설정 */
 body {
   font-family: 'Lato', sans-serif;
-  background-image: url('../img/index_영화관.jpg');
+  background-image: url('/img/index_영화관.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
