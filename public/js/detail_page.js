@@ -53,6 +53,9 @@ function loadReviews(movieId) {
         `;
         reviewContainer.appendChild(div);
       });
+      if(data.length === 0) {
+        reviewContainer.innerHTML = '<p>현재 리뷰가 없습니다.</p>';
+      }
     })
     .catch(err => {
       console.error('리뷰 불러오기 실패:', err);
@@ -110,6 +113,7 @@ function loadReviewWordBubbleChart(movieId) {
       // data가 배열인지, 그리고 비어있지 않은지 확인
       if (!Array.isArray(data) || data.length === 0) {
         console.warn('데이터가 없거나 올바른 배열 형식이 아닙니다.');
+        document.getElementById('word-bubble-chart').innerHTML = '<text x="20%" y="50%">리뷰 단어 버블 차트를 불러올 수 없습니다.</text>';  
         return;  // 데이터가 없으면 차트 그리지 않음
       }
 

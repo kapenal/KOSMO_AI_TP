@@ -4,7 +4,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     const formattedDate = `${mm}.${dd} 기준 ↺`;
-
     document.getElementById('date-display').textContent = formattedDate;
 
     // trend-list 데이터 불러오기
@@ -31,6 +30,12 @@ window.addEventListener('DOMContentLoaded', async () => {
                     <div class="genre">${movie.장르}</div>
                 </div>
             `;
+            div.style.cursor = "pointer";
+            // 클릭 시 기존 검색 함수 실행
+            div.addEventListener('click', () => {
+                executeSearch(movie.제목);
+            });
+
             container.appendChild(div);
         });
     } catch (err) {
