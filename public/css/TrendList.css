@@ -54,11 +54,49 @@ body {
 
 /* 페이지 날짜, 리로드 버튼 */
 #date-display-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px !important;
   margin-bottom: 20px;
+  width: auto;
+  padding: 0 10px 0 0;
+  cursor: default !important;
 }
 
-#date-display-btn:hover {
-  background-color: #ffd700;
+/* 날짜 텍스트 스타일 */
+#date-text {
+  text-align: right;
+  color: #ccc;
+  font-size: 0.85rem;
+  font-weight: normal;
+  white-space: normal;
+}
+
+#date-text::first-line {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* 새로고침 동그란 버튼 */
+#reload-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 1.5rem; /* 기존 1.2rem에서 더 크게 */
+  font-weight: 700;
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+}
+
+#reload-icon:hover {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease;
 }
 
 /* 상단 여백 확보 */
@@ -82,14 +120,6 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   margin-bottom: 100px;
   backdrop-filter: blur(4px);
-}
-
-/* 날짜 표시 */
-#date-display {
-  color: rgb(255, 255, 255);
-  margin-bottom: 20px;
-  text-align: right;
-  margin-right: 40px;
 }
 
 /* 리스트 컨테이너: 가로 정렬 (핵심 변경) */
@@ -128,15 +158,6 @@ body {
   font-weight: bold;
   color: rgb(255, 255, 255);
   font-size: 24px;
-}
-
-/* 상태 텍스트 (예: NEW) */
-.status {
-  font-size: 12px;
-  color: #ff4d4f;
-}
-.status.new {
-  color: #00b894;
 }
 
 /* 포스터 이미지 */
