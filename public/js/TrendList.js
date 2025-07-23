@@ -1,17 +1,21 @@
 window.addEventListener('DOMContentLoaded', async () => {
     // 날짜 표시 및 리로드 버튼 처리
     const today = new Date();
+    const yy = String(today.getFullYear());
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    const formattedDate = `${mm}.${dd} 기준`;
-
+    const hh = String(today.getHours()).padStart(2, '0');
+    const min = String(today.getMinutes()).padStart(2, '0');
+    const sec = String(today.getSeconds()).padStart(2, '0');
+    
+    const formattedDate = `${yy}.${mm}.${dd}`;
+    const formattedTime = `${hh}:${min}:${sec}`;
+    document.getElementById('date-text').innerHTML = `${formattedDate}<br>${formattedTime}`;
+    
     const dateText = document.getElementById('date-text');
-    const reloadBtn = document.getElementById('date-display-btn');
     const reloadIcon = document.getElementById('reload-icon');
 
-    dateText.textContent = formattedDate;
-
-    reloadBtn.addEventListener('click', () => {
+    reloadIcon.addEventListener('click', () => {
         // 텍스트 변경
         dateText.textContent = "실시간 업데이트 중입니다...";
         // 아이콘 회전 애니메이션 추가
