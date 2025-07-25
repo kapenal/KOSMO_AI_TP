@@ -63,13 +63,12 @@ document.getElementById('userInput').value = '';
 
 // 전체 입력을 질문으로 보냄
 const question = input;
-const movie_title = null;  // 필요 시 나중에 FastAPI에서 추출하도록 처리 가능
 
 try {
       const res = await fetch('/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ movie_title, question }),
+          body: JSON.stringify({question }),
         });
 
         if (!res.ok) {
@@ -78,7 +77,7 @@ try {
         }
 
         const data = await res.json();
-        chatbox.innerHTML += `<div class="bot">🎬 ${data.answer}</div>`;
+        chatbox.innerHTML += `<div class="bot">${data.answer}</div>`;
         chatbox.scrollTop = chatbox.scrollHeight;
       } catch (err) {
         chatbox.innerHTML += `<div class="bot">❌ 서버 응답 오류입니다.</div>`;

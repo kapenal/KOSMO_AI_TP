@@ -25,7 +25,7 @@ movie_id = sys.argv[1]
 url = f'https://m.kinolights.com/title/{movie_id}?tab=review'
 
 options = Options()
-options.add_argument('--headless')  # 필요하면 헤드리스 모드로 변경
+options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
 options.add_argument("--disable-blink-features=AutomationControlled")
@@ -75,13 +75,7 @@ for card in review_cards:
         review_list.append(content_text)
 
 text = " ".join(review_list)
-<<<<<<< HEAD
-text = re.sub(r'[^\w\s가-힣]', '', text)  # 특수문자 제거
-=======
-
-# 한글만 남기고 다른 문자는 제거
-text = re.sub(r'[^가-힣\s]', '', text)  # 한글과 공백을 제외한 모든 문자 제거
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
+text = re.sub(r'[^가-힣\s]', '', text)
 
 word_extractor = WordExtractor()
 word_extractor.train(text)
@@ -90,35 +84,26 @@ word_scores = word_extractor.extract()
 tokenizer = LTokenizer(scores={word: float(score.cohesion_forward) for word, score in word_scores.items()})
 tokens = tokenizer.tokenize(text)
 
-# 불용어 리스트 정의
 stopwords = ['그', '안', '더', '이', '의', '을', '는', '도', '로', '과', '와', '께']
 
-# 어미가 "이", "의", "을", "는", "도", "로", "과", "와" 등으로 끝나는 단어를 필터링
 def filter_suffix(token):
-    # 추가된 어미 처리 (끝에 붙은 어미들만 필터링)
     suffixes = ['이', '의', '을', '는', '도', '과', '와', '가', '과는', '와는', '은', '를', '으로']
     for suffix in suffixes:
         if token.endswith(suffix):
-            return token[:-len(suffix)]  # 어미를 제거한 형태로 반환
+            return token[:-len(suffix)]
     return token
 
-<<<<<<< HEAD
-# 필터링 함수 적용
-filtered_tokens = [filter_suffix(token) for token in tokens if token not in stopwords]
-=======
-# 길이가 1인 단어와 불용어를 제외하고 필터링
-filtered_tokens = [filter_suffix(token) for token in tokens if token not in stopwords and len(token) > 1]
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
+# '영화' 제거 추가
+filtered_tokens = []
+for token in tokens:
+    if token in stopwords or len(token) <= 1:
+        continue
+    base = filter_suffix(token)
+    if base != '영화':
+        filtered_tokens.append(base)
 
-# 중복된 단어가 아닌 경우만 필터링 후, 빈도 계산
 count = Counter(filtered_tokens)
 top_items = count.most_common(20)
 
 data = [{"text": word, "value": freq} for word, freq in top_items]
-
-# JSON 문자열을 stdout으로 출력
-<<<<<<< HEAD
 print(json.dumps(data, ensure_ascii=False))
-=======
-print(json.dumps(data, ensure_ascii=False))
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
