@@ -6,10 +6,16 @@ const { spawn } = require('child_process');
 const path = require("path");
 const { urlencoded } = require('body-parser');
 const { exec } = require("child_process"); // 맨 위에 이미 있지 않다면 추가
+<<<<<<< HEAD
 
 // 추가한 바디 파싱
 app.use(express.urlencoded({ extended: true }));
 
+=======
+const axios = require('axios'); // FastAPI와 통신하기 위한 axios 추가
+// 추가한 바디 파싱
+app.use(express.urlencoded({ extended: true }));
+>>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
 // JSON 파싱 미들웨어 추가
 app.use(express.json());
 
@@ -307,6 +313,27 @@ app.post('/api/predict', (req, res) => {
 
 //-------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+// 챗봇
+// 클라이언트가 질문 보내면 FastAPI에 전달 후 결과 응답
+app.post('/ask', async (req, res) => {
+    const { movie_title, question } = req.body;
+    console.log('[REQ DEBUG] movie_title:', movie_title);
+    console.log('[REQ DEBUG] question:', question);  // 🔍 여기서 실제 질문을 확인하세요
+    try {
+        const response = await axios.post('http://localhost:8000/qa', {
+        movie_title,
+        question
+        });
+        res.json({ answer: response.data.answer });
+    } catch (error) {
+        console.error('FastAPI 호출 에러:', error.message);
+        res.status(500).json({ answer: '서버 에러가 발생했습니다.' });
+    }
+});
+
+>>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
 
 // 서버 시작
 app.listen(port, () => {
