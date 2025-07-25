@@ -75,7 +75,10 @@ for card in review_cards:
         review_list.append(content_text)
 
 text = " ".join(review_list)
-text = re.sub(r'[^가-힣\s]', '', text)
+
+# 한글만 남기고 다른 문자는 제거
+text = re.sub(r'[^가-힣\s]', '', text)  # 한글과 공백을 제외한 모든 문자 제거
+
 
 word_extractor = WordExtractor()
 word_extractor.train(text)
@@ -93,17 +96,14 @@ def filter_suffix(token):
             return token[:-len(suffix)]
     return token
 
-# '영화' 제거 추가
-filtered_tokens = []
-for token in tokens:
-    if token in stopwords or len(token) <= 1:
-        continue
-    base = filter_suffix(token)
-    if base != '영화':
-        filtered_tokens.append(base)
+# 길이가 1인 단어와 불용어를 제외하고 필터링
+filtered_tokens = [filter_suffix(token) for token in tokens if token not in stopwords and len(token) > 1]
 
+# 중복된 단어가 아닌 경우만 필터링 후, 빈도 계산
 count = Counter(filtered_tokens)
 top_items = count.most_common(20)
 
 data = [{"text": word, "value": freq} for word, freq in top_items]
+
+# JSON 문자열을 stdout으로 출력
 print(json.dumps(data, ensure_ascii=False))

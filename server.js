@@ -304,8 +304,6 @@ app.post('/api/predict', (req, res) => {
     });
 });
 
-//-------------------------------------------------------
-
 // 챗봇
 // 클라이언트가 질문 보내면 FastAPI에 전달 후 결과 응답
 app.post('/ask', async (req, res) => {
@@ -321,7 +319,6 @@ app.post('/ask', async (req, res) => {
         res.status(500).json({ answer: '서버 에러가 발생했습니다.' });
     }
 });
-
 
 // 서버 시작
 app.listen(port, () => {
