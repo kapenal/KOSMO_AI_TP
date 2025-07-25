@@ -155,15 +155,14 @@
       document.getElementById('userInput').value = '';
       chatbox.scrollTop = chatbox.scrollHeight;
 
-      // 질문과 영화 제목 (null 고정)
-      const question = input;
-      const movie_title = null;
+// 전체 입력을 질문으로 보냄
+const question = input;
 
       try {
         const res = await fetch('/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ movie_title, question }),
+          body: JSON.stringify({question }),
         });
 
         if (!res.ok) {

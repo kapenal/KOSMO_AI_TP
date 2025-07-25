@@ -131,21 +131,21 @@
 
     <script src="../js/index_now_screen.js" defer></script>
 
-<!-- 챗봇 버튼 -->
-<button id="chat-toggle-btn"><i class="bi bi-chat-dots"></i> 챗봇</button>
+    <!-- 챗봇 버튼 -->
+    <button id="chat-toggle-btn"><i class="bi bi-chat-dots"></i> 챗봇</button>
 
-<!-- 챗봇 창 -->
-<div id="chat-box" class="hidden">
-    <iframe src="/html/chat_bot.html"></iframe>
-</div>
-<!-- 챗봇 열기/닫기 스크립트 -->
-<script>
-    const toggleBtn = document.getElementById('chat-toggle-btn');
-    const chatBox = document.getElementById('chat-box');
+    <!-- 챗봇 창 -->
+    <div id="chat-box" class="hidden">
+        <iframe src="/html/chat_bot.html"></iframe>
+    </div>
+    <!-- 챗봇 열기/닫기 스크립트 -->
+    <script>
+        const toggleBtn = document.getElementById('chat-toggle-btn');
+        const chatBox = document.getElementById('chat-box');
 
-    toggleBtn.addEventListener('click', () => {
-        chatBox.classList.toggle('hidden');
-    });
-</script>
+        toggleBtn.addEventListener('click', () => {
+            chatBox.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

@@ -307,12 +307,10 @@ app.post('/api/predict', (req, res) => {
 // 챗봇
 // 클라이언트가 질문 보내면 FastAPI에 전달 후 결과 응답
 app.post('/ask', async (req, res) => {
-    const { movie_title, question } = req.body;
-    console.log('[REQ DEBUG] movie_title:', movie_title);
+    const {question } = req.body;
     console.log('[REQ DEBUG] question:', question);  // 🔍 여기서 실제 질문을 확인하세요
     try {
         const response = await axios.post('http://localhost:8000/qa', {
-        movie_title,
         question
         });
         res.json({ answer: response.data.answer });

@@ -25,7 +25,7 @@ movie_id = sys.argv[1]
 url = f'https://m.kinolights.com/title/{movie_id}?tab=review'
 
 options = Options()
-options.add_argument('--headless')  # 필요하면 헤드리스 모드로 변경
+options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
 options.add_argument("--disable-blink-features=AutomationControlled")
@@ -87,16 +87,13 @@ word_scores = word_extractor.extract()
 tokenizer = LTokenizer(scores={word: float(score.cohesion_forward) for word, score in word_scores.items()})
 tokens = tokenizer.tokenize(text)
 
-# 불용어 리스트 정의
 stopwords = ['그', '안', '더', '이', '의', '을', '는', '도', '로', '과', '와', '께']
 
-# 어미가 "이", "의", "을", "는", "도", "로", "과", "와" 등으로 끝나는 단어를 필터링
 def filter_suffix(token):
-    # 추가된 어미 처리 (끝에 붙은 어미들만 필터링)
     suffixes = ['이', '의', '을', '는', '도', '과', '와', '가', '과는', '와는', '은', '를', '으로']
     for suffix in suffixes:
         if token.endswith(suffix):
-            return token[:-len(suffix)]  # 어미를 제거한 형태로 반환
+            return token[:-len(suffix)]
     return token
 
 # 길이가 1인 단어와 불용어를 제외하고 필터링
