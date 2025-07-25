@@ -157,12 +157,12 @@ def answer_question(req: QARequest):
             # 영화관명 안 주어졌으면 지역 내 첫번째 영화관 정보 리턴
             if filtered_cinemas:
                 cinema = filtered_cinemas[0]
-                return {"answer": f"🎬 {cinema['cinema_name']} 위치는 {cinema['address']} 입니다."}
+                return {"answer": f"{cinema['cinema_name']} 위치는 {cinema['address']} 입니다."}
             else:
                 return {"answer": "해당 지역에 영화관 정보가 없습니다."}
         elif score >= 70:
             cinema = next(c for c in filtered_cinemas if c["cinema_name"] == matched)
-            return {"answer": f"🎬 {cinema['cinema_name']} 위치는 {cinema['address']} 입니다."}
+            return {"answer": f"{cinema['cinema_name']} 위치는 {cinema['address']} 입니다."}
         else:
             return {"answer": "해당 영화관을 찾을 수 없습니다."}
 
@@ -208,7 +208,7 @@ def answer_question(req: QARequest):
                 for version, times in versions.items():
                     times_sorted = ", ".join(sorted(set(times)))
                     version_str = f"({version}) " if version else ""
-                    results.append(f"🎬 {c['cinema_name']} {version_str}{movie_title} 상영시간:<br>\n{times_sorted}<br>\n")
+                    results.append(f"{c['cinema_name']} {version_str}{movie_title} 상영시간:<br>\n{times_sorted}<br>\n")
 
         if results:
             return {"answer": "\n".join(results)}
