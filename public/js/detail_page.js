@@ -179,3 +179,37 @@ function loadReviewWordBubbleChart(movieId) {
       console.error('단어 버블 차트 데이터 로드 실패:', err);
     });
 }
+// 추가사항(리뷰 구현)
+function submitReview() {
+  const reviewText = document.getElementById('review_text').value.trim();
+  const score = document.getElementById('review_score').value;
+  if (score > 5) {
+  alert("평점은 최대 5점까지 입력 가능합니다.");
+  return;
+  }
+  const nickname = document.getElementById('review_nickname').value.trim();
+
+  // 유효성 검사
+  if (!reviewText || !nickname) {
+    alert("닉네임과 리뷰를 입력해주세요.");
+    return;
+  }
+
+  // 리뷰 HTML 요소 생성
+  const reviewContainer = document.getElementById('review_list');
+  const tempDiv = document.createElement('div');
+  tempDiv.className = 'review-item temp-review';
+  tempDiv.innerHTML = `
+    <p class="review-nickname"><strong>${nickname}</strong></p>
+    <p class="review-text">${reviewText}</p>
+    <p class="review-score">평점: ${parseFloat(score).toFixed(1)}</p>
+  `;
+
+  // 리뷰를 맨 위에 추가
+  reviewContainer.prepend(tempDiv);
+
+  // 입력칸 초기화
+  document.getElementById('review_text').value = '';
+  document.getElementById('review_score').value = '5';
+  document.getElementById('review_nickname').value = '';
+}

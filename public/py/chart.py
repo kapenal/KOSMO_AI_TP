@@ -75,13 +75,10 @@ for card in review_cards:
         review_list.append(content_text)
 
 text = " ".join(review_list)
-<<<<<<< HEAD
-text = re.sub(r'[^\w\s가-힣]', '', text)  # 특수문자 제거
-=======
 
 # 한글만 남기고 다른 문자는 제거
 text = re.sub(r'[^가-힣\s]', '', text)  # 한글과 공백을 제외한 모든 문자 제거
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
+
 
 word_extractor = WordExtractor()
 word_extractor.train(text)
@@ -102,13 +99,8 @@ def filter_suffix(token):
             return token[:-len(suffix)]  # 어미를 제거한 형태로 반환
     return token
 
-<<<<<<< HEAD
-# 필터링 함수 적용
-filtered_tokens = [filter_suffix(token) for token in tokens if token not in stopwords]
-=======
 # 길이가 1인 단어와 불용어를 제외하고 필터링
 filtered_tokens = [filter_suffix(token) for token in tokens if token not in stopwords and len(token) > 1]
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
 
 # 중복된 단어가 아닌 경우만 필터링 후, 빈도 계산
 count = Counter(filtered_tokens)
@@ -117,8 +109,4 @@ top_items = count.most_common(20)
 data = [{"text": word, "value": freq} for word, freq in top_items]
 
 # JSON 문자열을 stdout으로 출력
-<<<<<<< HEAD
 print(json.dumps(data, ensure_ascii=False))
-=======
-print(json.dumps(data, ensure_ascii=False))
->>>>>>> 3d70ce5da79ea56a5e395d2c362e5ed1aec727f7
