@@ -143,6 +143,9 @@ def chatbot_response(text: str) -> str:
     movies = extracted["movie"]
 
     if intent == "showtime":
+        if not movies:
+            return "해당 영화관과 상영시간을 확인할 영화를 입력해주세요."
+
         region, cinema, movie, showtimes = find_showtimes(regions, cinemas, movies, text)
         if showtimes:
             return f"{cinema}에서 {movie} 상영시간은 {', '.join(showtimes)}입니다."
