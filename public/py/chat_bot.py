@@ -42,7 +42,7 @@ class ChatRequest(BaseModel):
 # 조사 제거 함수
 def clean_entity(entity: str) -> str:
     # 조사를 제거 (예: 강남에 -> 강남, 서울에서 -> 서울)
-    for josa in ["에서", "으로", "에게", "에게서", "한테", "로", "에", "도", "은", "는", "이", "가"]:
+    for josa in ["에서", "으로", "에게", "에게서", "한테", "로", "에", "도", "은", "는", "이", "가", "시"]:
         if entity.endswith(josa):
             return entity[: -len(josa)]
     return entity
@@ -148,9 +148,9 @@ def chatbot_response(text: str) -> str:
 
         region, cinema, movie, showtimes = find_showtimes(regions, cinemas, movies, text)
         if showtimes:
-            return f"{cinema}에서 {movie} 상영시간은 {', '.join(showtimes)}입니다."
+            return f"[{cinema}]에서 [{movie}] 상영시간은<br>{', '.join(showtimes)}입니다."
         else:
-            return "죄송하지만 해당 상영시간 정보를 찾지 못했습니다."
+            return "죄송하지만 해당 상영시간 정보를 찾지 못했습니다.<br>정확한 영화관명과 영화제목을 다시 입력해주세요."
 
     elif intent == "cinema_location":
         if not cinemas or all(name == "영화관" for name in cinemas):
@@ -159,9 +159,11 @@ def chatbot_response(text: str) -> str:
                 if any(any(region in reg for reg in c.get("region", [])) for region in regions)
             ]
             if cinemas_in_region:
-                reply = f"{' / '.join(regions)} 지역의 영화관 목록입니다:\n"
+                reply = f"{' / '.join(regions)} 지역의 영화관 목록입니다.<br><br>\n"
                 for c in cinemas_in_region:
-                    reply += f"- {c.get('cinema_name')} 주소: {c.get('address')}\n"
+                    reply += f"[{c.get('cinema_name')}]<br>\n"
+                    reply += f"{c.get('address')}<br><br>\n"
+                # reply += f"예: {cinemas_in_region[0].get('cinema_name')} 전지적 독자 시점 시간 알려줘\n"
                 return reply.strip()
             else:
                 return f"{' / '.join(regions)} 지역에 영화관 정보가 없습니다."
