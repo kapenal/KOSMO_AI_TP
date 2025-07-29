@@ -129,7 +129,7 @@
   <div id="chat-container">
     <div id="chatbox"></div>
     <div id="input-area">
-      <input id="userInput" type="text" placeholder="예: 주변 영화관 찾아줘" autocomplete="off" />
+      <input id="userInput" type="text" placeholder="예: 강남 영화관 찾아줘" autocomplete="off" />
         <button id="sendBtn" onclick="askQuestion()" aria-label="전송">
           <i class="bi bi-arrow-right" style="font-size: 1.2rem;"></i>
         </button>
@@ -139,7 +139,7 @@
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const chatbox = document.getElementById('chatbox');
-      const helpMessage = `안녕하세요! Movie Sensors 챗봇입니다. \n주변 영화관을 찾아보세요!`;
+      const helpMessage = `안녕하세요! Movie Sensors 챗봇입니다. \n\n영화관 위치와 영화 상영시간을 확인해보세요! \n\n [예시] \n - 강남 영화관 찾아줘 \n - 강남 메가박스 전지적 독자 시점 상영시간 알려줘`;
 
       chatbox.innerHTML += `<div class="bot">${helpMessage.replace(/\n/g, '<br>')}</div>`;
       chatbox.scrollTop = chatbox.scrollHeight;
