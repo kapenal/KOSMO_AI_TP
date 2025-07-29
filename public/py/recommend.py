@@ -2,16 +2,17 @@ import sys
 import json
 import numpy as np
 import joblib
-import numpy as np
 from soynlp.tokenizer import LTokenizer
 import io, os
+
+# 콘솔 출력 인코딩 설정 (한글 깨짐 방지)
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
+# 현재 파일 위치 기준 모델 데이터 경로 설정
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# public/py → public → TeamProject → model 로 올라감
 PATH = os.path.normpath(os.path.join(BASE_DIR, '..', '..', 'model'))
 
-# 모델 및 데이터 로드
+# 모델 및 데이터 불러오기
 model = joblib.load(os.path.join(PATH, "word2vec_movie.model"))
 movie_vectors = joblib.load(os.path.join(PATH, "movie_vectors.pkl"))
 movies = joblib.load(os.path.join(PATH, "movies.pkl"))
@@ -22,17 +23,20 @@ raw_word_scores = joblib.load(os.path.join(PATH, "soynlp_word_scores.pkl"))
 word_scores = {w: s.cohesion_forward for w, s in raw_word_scores.items()}
 tokenizer = LTokenizer(scores=word_scores)
 
+# 제목 토큰화 함수
 def tokenize_title(text):
     if not text:
         return []
     text = text.strip().replace(" ", "")
     return tokenizer.tokenize(text)
 
+# 자카드 유사도 함수
 def jaccard_similarity(set1, set2):
     if not set1 or not set2:
         return 0.0
     return len(set1 & set2) / len(set1 | set2)
 
+# 가장 유사한 영화 제목 인덱스 찾기
 def find_similar_movie(input_title, title_tokens, threshold=0.1):
     input_tokens = set(tokenize_title(input_title))
     best_match_idx = -1
@@ -44,17 +48,18 @@ def find_similar_movie(input_title, title_tokens, threshold=0.1):
             best_match_idx = idx
     return best_match_idx
 
+# 영화 추천 함수
 def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
     matched_idx = find_similar_movie(input_title, title_tokens)
 
     if matched_idx == -1:
         input_vec = np.mean(movie_vectors, axis=0)
         input_genres = set()
-        input_overview_vec = input_vec  # 그냥 평균
+        input_overview_vec = input_vec
     else:
         input_vec = movie_vectors[matched_idx]
         input_genres = set(movies[matched_idx].get("genres", []))
-        input_overview_vec = input_vec  # word2vec 기반이므로 같은 벡터 사용
+        input_overview_vec = input_vec
 
     input_norm = np.linalg.norm(input_vec)
     vectors_norm = np.linalg.norm(movie_vectors, axis=1)
@@ -98,14 +103,12 @@ def recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5):
 
     return recommendations
 
-# main 진입점
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({"error": "영화 제목을 입력하세요. 예: python movie_recommender.py 해운대"}, ensure_ascii=False))
         sys.exit(1)
 
     input_title = " ".join(sys.argv[1:])
-
     recs = recommend_movie(input_title, movies, movie_vectors, title_tokens, top_n=5)
 
     result = {

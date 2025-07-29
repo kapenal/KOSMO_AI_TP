@@ -117,7 +117,7 @@ function loadReviewWordBubbleChart(movieId) {
         return;  // 데이터가 없으면 차트 그리지 않음
       }
 
-      console.log('버블 차트 데이터:', data);  // 디버깅용 로그
+      // console.log('버블 차트 데이터:', data);  // 디버깅용 로그
 
       const svg = d3.select('#word-bubble-chart');
       svg.selectAll('*').remove(); // 기존 차트 지우기
