@@ -8,3 +8,7 @@ venv/
 
 #node_modules 무시
 # node_modules/
+
+# 모델 체크포인트 무시
+model/intent_model/
+model/ner_model/
