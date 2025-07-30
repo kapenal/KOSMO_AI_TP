@@ -8,14 +8,18 @@ from difflib import get_close_matches
 
 app = FastAPI()
 
-# --- Load data and models ---
+# FastAPI
+# 자연어 처리 전 사용자 입력을 안정적으로 검증, 비동기 처리 지원(사용자 많아도 지연X),
+# FastAPI에서는 이걸 애플리케이션 시작 시 1번만 로딩하고, 이후 요청에선 메모리에 상주된 모델을 바로 사용
+# 영화관 및 상영시간 데이터 로드
 with open("data/all_cinema_with_showtimes.json", "r", encoding="utf-8") as f:
     cinema_data = json.load(f)
 
+# BERT의 intent
 intent_tokenizer = BertTokenizerFast.from_pretrained("model/intent_model")
 intent_model = BertForSequenceClassification.from_pretrained("model/intent_model")
 intent_model.eval()
-
+# BERT의 ner
 ner_tokenizer = BertTokenizerFast.from_pretrained("model/ner_model")
 ner_model = BertForTokenClassification.from_pretrained("model/ner_model")
 ner_model.eval()
@@ -41,12 +45,13 @@ class ChatRequest(BaseModel):
 
 # 조사 제거 함수
 def clean_entity(entity: str) -> str:
-    # 조사를 제거 (예: 강남에 -> 강남, 서울에서 -> 서울)
+    # 조사를 제거하여 지역명 정규화 전처리
     for josa in ["에서", "으로", "에게", "에게서", "한테", "로", "에", "도", "은", "는", "이", "가", "시"]:
         if entity.endswith(josa):
             return entity[: -len(josa)]
     return entity
 
+# BERT 기반 NER 모델 토큰 추출 및 후처리
 def extract_entities(entities):
     result = {"region": [], "cinema": [], "movie": []}
     current_entity = ""
@@ -74,9 +79,11 @@ def extract_entities(entities):
 
     return result
 
+# 텍스트 전처리 함수
 def normalize_text(text):
     return text.replace(" ", "").lower()
 
+# 유사한 영화를 찾는 함수
 def find_similar_movie_name(user_input, movie_list):
     normalized_input = normalize_text(user_input)
     normalized_movies = {normalize_text(title): title for title in movie_list}
@@ -85,21 +92,22 @@ def find_similar_movie_name(user_input, movie_list):
         return normalized_movies[matches[0]]
     return None
 
+# 상영 시간 찾는 함수
 def find_showtimes(regions, cinemas, movies, user_input):
     for c in cinema_data:
         if regions and not any(any(region in reg for reg in c.get("region", [])) for region in regions):
             continue
         if cinemas and not any(cinema in c.get("cinema_name", "") for cinema in cinemas):
             continue
-
+        
         movie_titles = [m.get("title", "") for m in c.get("movies", [])]
 
-        # 1. 정확히 매칭
+        # 정확한 매칭이 되었을 경우
         for mv in c.get("movies", []):
             if any(movie in mv.get("title", "") for movie in movies):
                 return c.get("region", [""])[0], c.get("cinema_name", ""), mv.get("title", ""), mv.get("showtimes", [])
 
-        # 2. 유사도 매칭을 모든 경우에 시도 (movies가 있든 없든)
+        # 정확한 매칭이 안되었을 경우
         candidates = movies if movies else [user_input]
         for candidate in candidates:
             movie_name = find_similar_movie_name(candidate, movie_titles)
@@ -113,6 +121,7 @@ def find_showtimes(regions, cinemas, movies, user_input):
 def chatbot_response(text: str) -> str:
     print(f"\n[사용자 입력] {text}")
 
+    # 의도 분류 intent
     inputs_intent = intent_tokenizer(text, return_tensors="pt")
     with torch.no_grad():
         outputs_intent = intent_model(**inputs_intent)
@@ -121,7 +130,8 @@ def chatbot_response(text: str) -> str:
         intent = intent_id2label[intent_id]
     print(f"[의도] {intent}")
 
-    tokens = ner_tokenizer.tokenize(text)
+    # 개체명 인식 ner = 입력 문장을 토큰화 → 모델 예측(추론) → 태깅 결과 추출
+    tokens = ner_tokenizer.tokenize(text) # 토큰화하여 서브워드 단위로 나누기
     inputs_ner = ner_tokenizer(text, return_tensors="pt")
     with torch.no_grad():
         outputs_ner = ner_model(**inputs_ner)
@@ -142,6 +152,7 @@ def chatbot_response(text: str) -> str:
     cinemas = extracted["cinema"]
     movies = extracted["movie"]
 
+    # NER 개체값에 맞는 출력
     if intent == "showtime":
         if not movies:
             return "해당 영화관과 상영시간을 확인할 영화를 입력해주세요."
@@ -163,7 +174,6 @@ def chatbot_response(text: str) -> str:
                 for c in cinemas_in_region:
                     reply += f"[{c.get('cinema_name')}]<br>\n"
                     reply += f"{c.get('address')}<br><br>\n"
-                # reply += f"예: {cinemas_in_region[0].get('cinema_name')} 전지적 독자 시점 시간 알려줘\n"
                 return reply.strip()
             else:
                 return f"{' / '.join(regions)} 지역에 영화관 정보가 없습니다."

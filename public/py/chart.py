@@ -100,10 +100,10 @@ tokenizer = LTokenizer(scores={word: float(score.cohesion_forward) for word, sco
 # 텍스트 토크나이즈
 tokens = tokenizer.tokenize(text)
 
-# 불용어 목록
+# 불용어 목록 = 띄어쓰기 기준
 stopwords = ['그', '안', '더', '이', '의', '을', '는', '도', '로', '과', '와', '께', '영화']
 
-# 토큰에서 접미사 제거 함수
+# 토큰에서 접미사 제거 함수 = 단어 맨 마지막 글자 기준
 def filter_suffix(token):
     suffixes = ['이', '의', '을', '는', '도', '과', '와', '가', '과는', '와는', '은', '를', '으로']
     for suffix in suffixes:
